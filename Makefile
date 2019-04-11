@@ -10,7 +10,7 @@ EXEC= grafy
 ${EXEC}: obj/main.o
 	g++ -Wall -pedantic -o ${EXEC} obj/main.o
 
-obj/main.o: src/main.cpp inc/lista.h
+obj/main.o: src/main.cpp inc/lista.h inc/lista.hpp
 	g++ ${CPPFLAGS} -Wall -pedantic -o obj/main.o src/main.cpp
 
 

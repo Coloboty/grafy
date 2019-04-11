@@ -5,8 +5,7 @@
 typedef unsigned int uint;
 using namespace std;
 
-/* DEKLARACJE/DEFINICJE KLAS */
-
+/* Definicja/deklaracja klasy ogniwo */
 template <typename T>
 class ogniwo{
 private:
@@ -23,6 +22,7 @@ public:
     T dajWartosc(void) {return wartosc;}
 };
 
+/* Definicja klasy lista */
 template <typename T>
 class lista{
 private:
@@ -30,86 +30,29 @@ private:
     uint licznik;
 
 public:
-    lista(){
-	glowa= new(ogniwo<T>);
-	ogon= new(ogniwo<T>);
-
-	glowa->zmienPoprzednik(nullptr);
-	glowa->zmienNastepnik(ogon);
-	ogon->zmienPoprzednik(glowa);
-	ogon->zmienNastepnik(nullptr);
-
-	licznik= 0;
-    }
-
-    ~lista(){
-	/* cout << "destruktor obiektu lista\n"; */
-	while(licznik > 0)
-	    usunOgniwo(ogon->dajPoprzednik());
-
-	delete(glowa);
-	delete(ogon);
-    }
-
+    lista();
+    ~lista();
+    
     ogniwo<T> *dajGlowe(void) {return glowa;}
     ogniwo<T> *dajOgon(void) {return ogon;}
-
-    void usunOgniwo(ogniwo<T> *ogn){
-	ogniwo<T> *przed, *za;
-
-	if(ogn == nullptr || licznik == 0)
-	    return;
-
-	/* cout << "usuwam ogniwo o wartosci " << ogn->dajWartosc() << '\n'; */
-	
-	przed= ogn->dajNastepnik();
-	za= ogn->dajPoprzednik();
-
-	przed->zmienPoprzednik(za);
-	za->zmienNastepnik(przed);
-	delete(ogn);
-	licznik--;
+    uint dajRozmiar(void) {return licznik;};
+    
+    ogniwo<T> *dajOstatnie(void){
+	if(licznik) return ogon->dajPoprzednik();
+	else return ogon;
     }
     
-    ogniwo<T> *dodajZa(T wartosc, ogniwo<T> *ogn){
-	ogniwo<T> *temp= new(ogniwo<T>);
-	ogniwo<T> *przed_nowym= ogn->dajNastepnik();
-	
-	temp->zmienWartosc(wartosc);
-	temp->zmienNastepnik(przed_nowym);
-	temp->zmienPoprzednik(ogn);
-	ogn->zmienNastepnik(temp);
-        przed_nowym->zmienPoprzednik(temp);
-
-	licznik++;
-	return temp;
+    ogniwo<T> *dajPierwsze(void){
+	if(licznik) return glowa->dajNastepnik();
+	else return glowa;
     }
 
-    ogniwo<T> *dodajPrzed(T wartosc, ogniwo<T> *ogn){
-	ogniwo<T> *temp= new(ogniwo<T>);
-	ogniwo<T> *za_nowym= ogn->dajPoprzednik();
-	
-	temp->zmienWartosc(wartosc);
-	temp->zmienNastepnik(ogn);
-	temp->zmienPoprzednik(za_nowym);
-	ogn->zmienPoprzednik(temp);
-        za_nowym->zmienNastepnik(temp);
-
-	licznik++;
-	return temp;
-    }
+    void usunOgniwo(ogniwo<T> *ogn);
+    ogniwo<T> *dodajZa(T wartosc, ogniwo<T> *ogn);
+    ogniwo<T> *dodajPrzed(T wartosc, ogniwo<T> *ogn);
+    void dodajHurtowo(T*, uint);
 };
 
 /* DEKLARACJE/DEFINICJE FUNKCJI */
 
-template <typename T>
-void zapelnijListe(lista<T> *l, T *elementy, uint ile){
-    ogniwo <T> *temp= l->dajGlowe();
-    
-    for(uint i= 0; i < ile; i++){
-	temp= l->dodajZa(elementy[i], temp);
-    }
-
-    return;
-}
 #endif

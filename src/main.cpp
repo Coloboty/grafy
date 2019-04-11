@@ -1,5 +1,5 @@
 #include <iostream>
-#include "lista.h"
+#include "lista.hpp"
 
 using namespace std;
 
@@ -11,14 +11,7 @@ int main(void){
 
     cout << "Początek programu!\n";
 
-    /*
-    test.dodajZa(12, test.dajGlowe());
-    test.dodajPrzed(13, test.dajOgon());
-    test.dodajPrzed(14, test.dajOgon());
-    test.dodajPrzed(21, test.dajOgon());
-    test.dodajPrzed(37, test.dajOgon());
-    */
-    zapelnijListe(test, tab, 8);
+    test->dodajHurtowo(tab, 8);
     
     wypiszElementy(test);
 

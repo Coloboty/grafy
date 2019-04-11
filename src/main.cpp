@@ -1,21 +1,27 @@
 #include <iostream>
 #include "lista.hpp"
+#include "grafy_lista.hpp"
+#include "grafy_macierz.hpp"
 
 using namespace std;
 
 void wypiszElementy(lista<int> *x);
 
 int main(void){
-    lista<int> *test= new(lista<int>);
-    int tab[8]= {1, 2, 3, 4, 2, 1, 3, 7};
-
-    cout << "Początek programu!\n";
-
-    test->dodajHurtowo(tab, 8);
+    graf_lista<int, int> *test= new(graf_lista<int, int>);
+    ogniwo< wierzcholek<int>* > *w1, *w2;
+    ogniwo< krawedz<int, int>* > *k1;
     
-    wypiszElementy(test);
+    w1= test->dodajWierzcholek(21);
+    w2= test->dodajWierzcholek(37);
+    k1= test->dodajKrawedz(2137, w1, w2);
 
-    delete test;
+    cout << test->dajWartosc(w1) << '\n';
+    cout << test->dajWartosc(w2) << '\n';
+    cout << test->dajWartosc(k1) << '\n';
+    
+    
+    delete(test);
     cout << "Koniec programu!\n";
     return 0;
 }

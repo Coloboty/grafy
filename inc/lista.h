@@ -46,6 +46,8 @@ public:
 	if(licznik) return glowa->dajNastepnik();
 	else return glowa;
     }
+    
+    ogniwo<T> *operator[](const uint ind);
 
     void usunOgniwo(ogniwo<T> *ogn);
     ogniwo<T> *dodajZa(T wartosc, ogniwo<T> *ogn);

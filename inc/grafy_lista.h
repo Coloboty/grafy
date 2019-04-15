@@ -64,12 +64,12 @@ public:
 	else if(w == w2)
 	    i2= i;
     }
-    /* void zmienIncydencje2(wierzcholek<T, K> *w){}; */
-
+    
     ogniwo< krawedz<T, K>* > *dajMiejsce(void) {return miejsce;}
     wierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
     wierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
-    
+
+    K dajWartosc(void) {return wartosc;}
     ogniwo< krawedz<T, K>* > *dajIncydencje(wierzcholek<T, K> *w){
 	if(w == w1)
 	    return i1;
@@ -78,17 +78,16 @@ public:
 	else
 	    return nullptr;
     }
-    /* ogniwo< krawedz<T, K>* > *dajIncydencje2(void) {return i2;} */
-    K dajWartosc(void) {return wartosc;}
 };
+
+/* -------------------------- */
 
 template <typename T, typename K>
 class graf_lista{
 private:
     lista< wierzcholek<T, K>* > *wierzcholki;
     lista< krawedz<T, K>* > *krawedzie;
-    /* lista< lista< krawedz<T> *> > incydencje; */
-
+    
 public:
     graf_lista(){
 	wierzcholki= new(lista< wierzcholek<T, K>* >);
@@ -150,6 +149,33 @@ public:
 	k->dajWierzcholek2()->usunIncydencje(k);
 	krawedzie->usunOgniwo(k->dajMiejsce());
 	delete k;
+    }
+
+    /* --------------------- */
+
+    wierzcholek<T, K> *dajKoncowyWierzcholek1(krawedz<T, K> *k){
+	return k->dajWierzcholek1();
+    }
+
+    wierzcholek<T, K> *dajKoncowyWierzcholek2(krawedz<T, K> *k){
+	return k->dajWierzcholek2();
+    }
+
+    void zmienWartosc(wierzcholek<T, K> *w, T wart){
+	w->zmienWartosc(wart);
+    }
+
+    void zmienWartosc(krawedz<T, K> *k, K wart){
+	k->zmienWartosc(wart);
+    }
+
+    wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k){
+	if(k->dajWierzcholek1() == w)
+	    return k->dajWierzcholek2();
+	else if(k->dajWierzcholek2() == w)
+	    return k->dajWierzcholek1();
+	else
+	    return nullptr;
     }
 };
 

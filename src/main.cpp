@@ -10,6 +10,7 @@ void wypiszElementy(lista<int> *x);
 int main(void){
     graf_lista<int, int> *test= new(graf_lista<int, int>);
     wierzcholek<int, int> *w1, *w2;
+    
     krawedz<int, int> *k1;
     
     w1= test->dodajWierzcholek(21);
@@ -19,9 +20,11 @@ int main(void){
     cout << test->dajWartosc(w1) << '\n';
     cout << test->dajWartosc(w2) << '\n';
     cout << test->dajWartosc(k1) << '\n';
+    cout << '\n';
+
+    cout << test->dajPrzeciwleglyWierzcholek(w1, k1)->dajWartosc() << '\n';
     
-    
-    delete(test);
+    delete test;
     cout << "Koniec programu!\n";
     return 0;
 }

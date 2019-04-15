@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void wypiszElementy(lista<int> *x);
+void wypiszElementy(lista<int> &x);
 
 int main(void){
     graf_lista<int, int> *test= new(graf_lista<int, int>);
@@ -23,16 +23,15 @@ int main(void){
     cout << '\n';
 
     cout << test->dajPrzeciwleglyWierzcholek(w1, k1)->dajWartosc() << '\n';
-    
-    delete test;
+
     cout << "Koniec programu!\n";
     return 0;
 }
 
-void wypiszElementy(lista<int> *x){
+void wypiszElementy(lista<int> &x){
     ogniwo<int> *leb, *ogon;
-    leb= x->dajGlowe();
-    ogon= x->dajOgon();
+    leb= x.dajGlowe();
+    ogon= x.dajOgon();
     ogon= ogon->dajPoprzednik();
 
     while(leb != ogon){

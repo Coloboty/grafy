@@ -89,4 +89,27 @@ void lista<T>::dodajHurtowo(T *elementy, uint ile){
     return;
 }
 
+template <typename T>
+ogniwo<T> *lista<T>::operator[](const uint ind){
+    ogniwo<T> *temp;
+	
+    if(licznik == 0 || ind >= licznik)
+	return glowa;
+	
+    if(ind < licznik/2){
+	temp= dajPierwsze();
+	    
+	for(uint i= 0; i < ind; i++)
+	    temp= temp->dajNastepnik();
+	return temp;
+    }
+    else{
+	temp= dajOstatnie();
+	    
+	for(uint i= licznik-1; i > ind; i--)
+	    temp= temp->dajPoprzednik();
+	return temp;
+    }
+}
+
 #endif

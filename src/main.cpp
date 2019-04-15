@@ -9,7 +9,7 @@ void wypiszElementy(lista<int> *x);
 
 int main(void){
     graf_lista<int, int> *test= new(graf_lista<int, int>);
-    wierzcholek<int> *w1, *w2;
+    wierzcholek<int, int> *w1, *w2;
     krawedz<int, int> *k1;
     
     w1= test->dodajWierzcholek(21);

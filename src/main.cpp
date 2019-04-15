@@ -8,21 +8,21 @@ using namespace std;
 void wypiszElementy(lista<int> &x);
 
 int main(void){
-    graf_lista<int, int> *test= new(graf_lista<int, int>);
-    wierzcholek<int, int> *w1, *w2;
+    graf_lista<int, int> test;
+    wierzcholek<int, int> *w1, *w2, *w3;
+    krawedz<int, int> *k1, *k2;
     
-    krawedz<int, int> *k1;
     
-    w1= test->dodajWierzcholek(21);
-    w2= test->dodajWierzcholek(37);
-    k1= test->dodajKrawedz(2137, w1, w2);
+    w1= test.dodajWierzcholek(21);
+    w2= test.dodajWierzcholek(37);
+    w3= test.dodajWierzcholek(911);
+    k1= test.dodajKrawedz(2137, w1, w2);
+    k2= test.dodajKrawedz(2138, w2, w3);
 
-    cout << test->dajWartosc(w1) << '\n';
-    cout << test->dajWartosc(w2) << '\n';
-    cout << test->dajWartosc(k1) << '\n';
-    cout << '\n';
-
-    cout << test->dajPrzeciwleglyWierzcholek(w1, k1)->dajWartosc() << '\n';
+    /* test.usunWierzcholek(w3); */
+    cout << test.czySasiedzi(w2, w3) << '\n';
+    test.usunKrawedz(k2);
+    cout << test.czySasiedzi(w2, w3) << '\n';
 
     cout << "Koniec programu!\n";
     return 0;

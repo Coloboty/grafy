@@ -7,8 +7,8 @@
 
 template <typename T>
 lista<T>::lista(){
-    glowa= new(ogniwo<T>);
-    ogon= new(ogniwo<T>);
+    glowa= new ogniwo<T>;
+    ogon= new ogniwo<T>;
 
     glowa->zmienPoprzednik(nullptr);
     glowa->zmienNastepnik(ogon);
@@ -24,8 +24,8 @@ lista<T>::~lista(){
     while(licznik > 0)
 	usunOgniwo(ogon->dajPoprzednik());
 
-    delete(glowa);
-    delete(ogon);
+    delete glowa ;
+    delete ogon ;
 }
 
 template <typename T>
@@ -33,6 +33,8 @@ void lista<T>::usunOgniwo(ogniwo<T> *ogn){
     ogniwo<T> *przed, *za;
     
     if(ogn == nullptr || licznik == 0)
+	return;
+    if(ogn == glowa || ogn == ogon)
 	return;
     
     /* cout << "usuwam ogniwo o wartosci " << ogn->dajWartosc() << '\n'; */
@@ -42,13 +44,13 @@ void lista<T>::usunOgniwo(ogniwo<T> *ogn){
     
     przed->zmienPoprzednik(za);
     za->zmienNastepnik(przed);
-    delete(ogn);
+    delete ogn;
     licznik--;
 }
 
 template <typename T>
 ogniwo<T> *lista<T>::dodajZa(T wartosc, ogniwo<T> *ogn){
-    ogniwo<T> *temp= new(ogniwo<T>);
+    ogniwo<T> *temp= new ogniwo<T>;
     ogniwo<T> *przed_nowym= ogn->dajNastepnik();
     
     temp->zmienWartosc(wartosc);
@@ -63,7 +65,7 @@ ogniwo<T> *lista<T>::dodajZa(T wartosc, ogniwo<T> *ogn){
 
 template <typename T>
 ogniwo<T> *lista<T>::dodajPrzed(T wartosc, ogniwo<T> *ogn){
-    ogniwo<T> *temp= new(ogniwo<T>);
+    ogniwo<T> *temp= new ogniwo<T>;
     ogniwo<T> *za_nowym= ogn->dajPoprzednik();
     
     temp->zmienWartosc(wartosc);

@@ -2,6 +2,7 @@
 #include "lista.hpp"
 #include "grafy_lista.hpp"
 #include "grafy_macierz.hpp"
+#include "kruskal.hpp"
 
 using namespace std;
 
@@ -10,16 +11,7 @@ void wypiszElementy(lista<int> &x);
 int main(void){
     graf_macierz<int, int> test(5);
     
-    mwierzcholek<int> *w1, *w2, *w3;
-    mkrawedz<int, int> *k1, *k2;
-    shared_ptr< lista < mwierzcholek<int>* > > l;
-    
-    w1= test.dodajWierzcholek(21);
-    w2= test.dodajWierzcholek(37);
-    w3= test.dodajWierzcholek(911);
-    k1= test.dodajKrawedz(2137, w1, w2);
-    k2= test.dodajKrawedz(2138, w2, w3);
-    
+    mKruskal(&test);
     
     cout << "Koniec programu!\n";
     return 0;

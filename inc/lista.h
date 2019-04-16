@@ -47,7 +47,8 @@ public:
 	else return glowa;
     }
     
-    ogniwo<T> *operator[](const uint ind);
+    ogniwo<T> *operator[](uint ind);
+    ogniwo<T> *dajOgniwo(uint ind);
 
     void usunOgniwo(ogniwo<T> *ogn);
     ogniwo<T> *dodajZa(T wartosc, ogniwo<T> *ogn);

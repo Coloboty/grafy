@@ -2,6 +2,8 @@
 #define GRAFY_MACIERZ_H
 
 #include <iostream>
+#include <memory>
+
 using namespace std;
 
 template <typename T>
@@ -50,6 +52,13 @@ public:
     
     mwierzcholek<T> *dajWierzcholek1(void) {return w1;}
     mwierzcholek<T> *dajWierzcholek2(void) {return w2;}
+
+    shared_ptr< lista< mwierzcholek<T>* > > dajWierzcholki(void){
+	shared_ptr< lista< mwierzcholek<T>* > > liz= make_shared< lista< mwierzcholek<T>* > >();
+	liz->dodajZa(w1, liz->dajPierwsze());
+	liz->dodajZa(w2, liz->dajPierwsze());
+	return liz;
+    }
 };
 
 /* ----------------------------- */
@@ -146,10 +155,14 @@ public:
     mwierzcholek<T> *dajKoncowyWierzcholek1(mkrawedz<T, K> *k) {return k->dajWierzcholek1();}
     mwierzcholek<T> *dajKoncowyWierzcholek2(mkrawedz<T, K> *k){return k->dajWierzcholek2();}
 
+    shared_ptr< lista< mwierzcholek<T>* > > dajKoncoweWierzcholki(mkrawedz<T, K> *k){
+	return k->dajWierzcholki();
+    }
+
     mwierzcholek<T> *dajPrzeciwleglyWierzcholek(mwierzcholek<T> *w, mkrawedz<T, K> *k){
 	mwierzcholek<T> *w1, *w2;
-	w1= k->dajWierzcholek1();
-	w2= k->dajWierzcholek2();
+	w1= k->dajWierzcholki()->dajOgniwo(0)->dajWartosc();
+	w2= k->dajWierzcholki()->dajOgniwo(1)->dajWartosc();
 
 	if(w == w1)
 	    return w2;

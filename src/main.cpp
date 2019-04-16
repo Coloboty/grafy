@@ -12,7 +12,7 @@ int main(void){
     
     mwierzcholek<int> *w1, *w2, *w3;
     mkrawedz<int, int> *k1, *k2;
-    lista < mwierzcholek<int>* > *l;
+    shared_ptr< lista < mwierzcholek<int>* > > l;
     
     w1= test.dodajWierzcholek(21);
     w2= test.dodajWierzcholek(37);
@@ -27,10 +27,10 @@ int main(void){
     cout << test.czySasiedzi(w1, w3) << '\n';
     cout << '\n';
 
-    l= test.dajWierzcholki();
+    l= test.dajKoncoweWierzcholki(k1);
     cout << (*l)[0]->dajWartosc()->dajWartosc() << '\n';
     cout << (*l)[1]->dajWartosc()->dajWartosc() << '\n';
-    cout << (*l)[2]->dajWartosc()->dajWartosc() << '\n';
+    /* cout << (*l)[2]->dajWartosc()->dajWartosc() << '\n'; */
     
     
     /* cout << '\n'; */

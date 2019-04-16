@@ -14,7 +14,7 @@ KRUSKAL= inc/kruskal.h inc/kruskal.hpp
 ${EXEC}: obj/main.o
 	g++ -Wall -pedantic -o ${EXEC} obj/main.o
 
-obj/main.o: src/main.cpp ${LISTA} ${GMACIERZ} ${GLISTA} ${KRUSKAL}
+obj/main.o: src/main.cpp ${LISTA} ${GMACIERZ} ${GLISTA} ${KRUSKAL} inc/porownywacz.h
 	g++ ${CPPFLAGS} -Wall -pedantic -o obj/main.o src/main.cpp
 
 

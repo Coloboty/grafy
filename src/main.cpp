@@ -9,8 +9,9 @@ void wypiszElementy(lista<int> &x);
 
 int main(void){
     graf_lista<int, int> test;
-    wierzcholek<int, int> *w1, *w2, *w3;
-    krawedz<int, int> *k1, *k2;
+    
+    lwierzcholek<int, int> *w1, *w2, *w3;
+    lkrawedz<int, int> *k1, *k2;
     
     
     w1= test.dodajWierzcholek(21);
@@ -23,7 +24,7 @@ int main(void){
     cout << test.czySasiedzi(w2, w3) << '\n';
     test.usunKrawedz(k2);
     cout << test.czySasiedzi(w2, w3) << '\n';
-
+    
     cout << "Koniec programu!\n";
     return 0;
 }

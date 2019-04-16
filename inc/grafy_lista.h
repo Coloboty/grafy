@@ -4,73 +4,73 @@
 #include <iostream>
 /* #include "lista.hpp" */
 
-template<typename T, typename K> class krawedz;
+template<typename T, typename K> class lkrawedz;
 
 template <typename T, typename K>
-class wierzcholek{
+class lwierzcholek{
 private:
     T wartosc;
-    ogniwo< wierzcholek<T, K>* > *miejsce;
-    lista< krawedz<T, K>* > *incydencje;
+    ogniwo< lwierzcholek<T, K>* > *miejsce;
+    lista< lkrawedz<T, K>* > *incydencje;
 
 public:
-    wierzcholek(T w){
+    lwierzcholek(T w){
 	wartosc= w;
-	incydencje= new lista< krawedz<T, K>* >;
+	incydencje= new lista< lkrawedz<T, K>* >;
     }
 
-    ~wierzcholek(){
+    ~lwierzcholek(){
 	delete incydencje;
     }
     
-    void zmienMiejsce(ogniwo< wierzcholek<T, K>* > *moje) {miejsce= moje;}
+    void zmienMiejsce(ogniwo< lwierzcholek<T, K>* > *moje) {miejsce= moje;}
     void zmienWartosc(T nowa) {wartosc= nowa;}
 
-    ogniwo< krawedz<T, K>* > *dodajIncydencje(krawedz<T, K> *k){
+    ogniwo< lkrawedz<T, K>* > *dodajIncydencje(lkrawedz<T, K> *k){
 	return incydencje->dodajZa(k, incydencje->dajPierwsze());
     }
 
-    void usunIncydencje(krawedz<T, K> *k){
+    void usunIncydencje(lkrawedz<T, K> *k){
 	incydencje->usunOgniwo(k->dajIncydencje(this));
     }
 
-    lista< krawedz<T, K>* > *dajListeIncydencji(void) {return incydencje;}
+    lista< lkrawedz<T, K>* > *dajListeIncydencji(void) {return incydencje;}
     
     T dajWartosc(void) {return wartosc;};
-    ogniwo< wierzcholek<T, K>* > *dajMiejsce(void) {return miejsce;}
+    ogniwo< lwierzcholek<T, K>* > *dajMiejsce(void) {return miejsce;}
 };
 
 /* ----------------------------------------- */
 
 template <typename T, typename K>
-class krawedz{
+class lkrawedz{
 private:
     K wartosc;
-    ogniwo< krawedz<T, K>* > *miejsce, *i1, *i2;
-    wierzcholek<T, K> *w1, *w2;
+    ogniwo< lkrawedz<T, K>* > *miejsce, *i1, *i2;
+    lwierzcholek<T, K> *w1, *w2;
 
 public:
-    krawedz(T w, wierzcholek<T, K> *w_1, wierzcholek<T, K> *w_2){
+    lkrawedz(T w, lwierzcholek<T, K> *w_1, lwierzcholek<T, K> *w_2){
 	wartosc= w;
 	w1= w_1;
 	w2= w_2;
     }
 
     void zmienWartosc(K w) {wartosc= w;}
-    void zmienMiejsce(ogniwo< krawedz<T, K>* > *moje) {miejsce= moje;}
-    void zmienIncydencje(ogniwo< krawedz<T, K>* > *i, wierzcholek<T, K> *w){
+    void zmienMiejsce(ogniwo< lkrawedz<T, K>* > *moje) {miejsce= moje;}
+    void zmienIncydencje(ogniwo< lkrawedz<T, K>* > *i, lwierzcholek<T, K> *w){
 	if(w == w1)
 	    i1= i;
 	else if(w == w2)
 	    i2= i;
     }
     
-    ogniwo< krawedz<T, K>* > *dajMiejsce(void) {return miejsce;}
-    wierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
-    wierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
+    ogniwo< lkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;}
+    lwierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
+    lwierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
 
     K dajWartosc(void) {return wartosc;}
-    ogniwo< krawedz<T, K>* > *dajIncydencje(wierzcholek<T, K> *w){
+    ogniwo< lkrawedz<T, K>* > *dajIncydencje(lwierzcholek<T, K> *w){
 	if(w == w1)
 	    return i1;
 	else if(w == w2)
@@ -85,13 +85,13 @@ public:
 template <typename T, typename K>
 class graf_lista{
 private:
-    lista< wierzcholek<T, K>* > *wierzcholki;
-    lista< krawedz<T, K>* > *krawedzie;
+    lista< lwierzcholek<T, K>* > *wierzcholki;
+    lista< lkrawedz<T, K>* > *lkrawedzie;
     
 public:
     graf_lista(){
-	wierzcholki= new(lista< wierzcholek<T, K>* >);
-	krawedzie= new(lista< krawedz<T, K>* >);
+	wierzcholki= new(lista< lwierzcholek<T, K>* >);
+	lkrawedzie= new(lista< lkrawedz<T, K>* >);
     }
     
     ~graf_lista(){
@@ -99,39 +99,39 @@ public:
 	    usunWierzcholek(wierzcholki->dajPierwsze()->dajWartosc());
 	
 	delete wierzcholki;
-	delete krawedzie;
+	delete lkrawedzie;
     }
     /* ------------ */
-    T dajWartosc(wierzcholek<T, K> *w){
+    T dajWartosc(lwierzcholek<T, K> *w){
 	return w->dajWartosc();
     }
 
-    K dajWartosc(krawedz<T, K> *k){
+    K dajWartosc(lkrawedz<T, K> *k){
 	return k->dajWartosc();
     }
     
 
-    wierzcholek<T, K> *dodajWierzcholek(T wartosc);
-    krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
+    lwierzcholek<T, K> *dodajWierzcholek(T wartosc);
+    lkrawedz<T, K> *dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
 					
-    void usunWierzcholek(wierzcholek<T, K> *w);
-    void usunKrawedz(krawedz<T, K> *k);
+    void usunWierzcholek(lwierzcholek<T, K> *w);
+    void usunKrawedz(lkrawedz<T, K> *k);
 
     /* --------------------- */
 
-    wierzcholek<T, K> *dajKoncowyWierzcholek1(krawedz<T, K> *k) {return k->dajWierzcholek1();}
-    wierzcholek<T, K> *dajKoncowyWierzcholek2(krawedz<T, K> *k){return k->dajWierzcholek2();}
+    lwierzcholek<T, K> *dajKoncowyWierzcholek1(lkrawedz<T, K> *k) {return k->dajWierzcholek1();}
+    lwierzcholek<T, K> *dajKoncowyWierzcholek2(lkrawedz<T, K> *k){return k->dajWierzcholek2();}
 
-    void zmienWartosc(wierzcholek<T, K> *w, T wart) {w->zmienWartosc(wart);}
-    void zmienWartosc(krawedz<T, K> *k, K wart) {k->zmienWartosc(wart);}
+    void zmienWartosc(lwierzcholek<T, K> *w, T wart) {w->zmienWartosc(wart);}
+    void zmienWartosc(lkrawedz<T, K> *k, K wart) {k->zmienWartosc(wart);}
 
-    wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k);
-    lista< krawedz<T, K>* > *dajIncydentneKrawedzie(wierzcholek<T, K> *w) {return w->dajListeIncydencji();}
+    lwierzcholek<T, K> *dajPrzeciwleglyWierzcholek(lwierzcholek<T, K> *w, lkrawedz<T, K> *k);
+    lista< lkrawedz<T, K>* > *dajIncydentneKrawedzie(lwierzcholek<T, K> *w) {return w->dajListeIncydencji();}
 
-    bool czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
+    bool czySasiedzi(lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
 
-    lista< wierzcholek<T, K>* > *dajWierzcholki(void) {return wierzcholki;}
-    lista< krawedz<T, K>* > *dajKrawedzie(void) {return krawedzie;}
+    lista< lwierzcholek<T, K>* > *dajWierzcholki(void) {return wierzcholki;}
+    lista< lkrawedz<T, K>* > *dajKrawedzie(void) {return lkrawedzie;}
 };
 
 #endif

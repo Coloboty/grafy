@@ -90,7 +90,7 @@ void lista<T>::dodajHurtowo(T *elementy, uint ile){
 }
 
 template <typename T>
-ogniwo<T> *lista<T>::operator[](const uint ind){
+ogniwo<T> *lista<T>::dajOgniwo(uint ind){
     ogniwo<T> *temp;
 	
     if(licznik == 0 || ind >= licznik)
@@ -110,6 +110,11 @@ ogniwo<T> *lista<T>::operator[](const uint ind){
 	    temp= temp->dajPoprzednik();
 	return temp;
     }
+}
+
+template <typename T>
+ogniwo<T> *lista<T>::operator[](uint ind){
+    return dajOgniwo(ind);
 }
 
 #endif

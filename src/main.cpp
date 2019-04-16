@@ -22,7 +22,7 @@ int main(void){
 
     /* test.usunWierzcholek(w3); */
     cout << test.czySasiedzi(w2, w3) << '\n';
-    test.usunKrawedz(k2);
+    /* test.usunKrawedz(k2); */
     cout << test.czySasiedzi(w2, w3) << '\n';
     
     cout << "Koniec programu!\n";

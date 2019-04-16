@@ -2,7 +2,10 @@
 #define GRAFY_LISTA_H
 
 #include <iostream>
-/* #include "lista.hpp" */
+#include <memory>
+#include "lista.hpp"
+
+using namespace std;
 
 template<typename T, typename K> class lkrawedz;
 
@@ -66,8 +69,14 @@ public:
     }
     
     ogniwo< lkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;}
-    lwierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
-    lwierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
+    
+    shared_ptr< lista< lwierzcholek<T, K>* > > dajWierzcholki(void){
+	shared_ptr< lista< lwierzcholek<T, K>* > > liz= make_shared< lista< lwierzcholek<T, K>* > >();
+	liz->dodajZa(w1, liz->dajPierwsze());
+	liz->dodajZa(w2, liz->dajPierwsze());
+
+	return liz;
+    }
 
     K dajWartosc(void) {return wartosc;}
     ogniwo< lkrawedz<T, K>* > *dajIncydencje(lwierzcholek<T, K> *w){
@@ -119,8 +128,9 @@ public:
 
     /* --------------------- */
 
-    lwierzcholek<T, K> *dajKoncowyWierzcholek1(lkrawedz<T, K> *k) {return k->dajWierzcholek1();}
-    lwierzcholek<T, K> *dajKoncowyWierzcholek2(lkrawedz<T, K> *k){return k->dajWierzcholek2();}
+    shared_ptr< lista< lwierzcholek<T, K>* > > dajKoncoweWierzcholki(lkrawedz<T, K> *k){
+	return k->dajWierzcholki();
+    }
 
     void zmienWartosc(lwierzcholek<T, K> *w, T wart) {w->zmienWartosc(wart);}
     void zmienWartosc(lkrawedz<T, K> *k, K wart) {k->zmienWartosc(wart);}

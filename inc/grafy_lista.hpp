@@ -40,18 +40,18 @@ void graf_lista<T, K>::usunWierzcholek(lwierzcholek<T, K> *w){
 
 template<typename T, typename K>
 void graf_lista<T, K>::usunKrawedz(lkrawedz<T, K> *k){
-    k->dajWierzcholek1()->usunIncydencje(k);
-    k->dajWierzcholek2()->usunIncydencje(k);
+    k->dajWierzcholki()->dajOgniwo(0)->dajWartosc()->usunIncydencje(k);
+    k->dajWierzcholki()->dajOgniwo(1)->dajWartosc()->usunIncydencje(k);
     lkrawedzie->usunOgniwo(k->dajMiejsce());
     delete k;
 }
 
 template<typename T, typename K>
 lwierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(lwierzcholek<T, K> *w, lkrawedz<T, K> *k){
-    if(k->dajWierzcholek1() == w)
-	return k->dajWierzcholek2();
-    else if(k->dajWierzcholek2() == w)
-	return k->dajWierzcholek1();
+    if(k->dajWierzcholki()->dajOgniwo(0)->dajWartosc() == w)
+	return k->dajWierzcholki()->dajOgniwo(0)->dajWartosc();
+    else if(k->dajWierzcholki()->dajOgniwo(1)->dajWartosc() == w)
+	return k->dajWierzcholki()->dajOgniwo(1)->dajWartosc();
     else
 	return nullptr;
 }

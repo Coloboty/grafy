@@ -19,22 +19,6 @@ int main(void){
     w3= test.dodajWierzcholek(911);
     k1= test.dodajKrawedz(2137, w1, w2);
     k2= test.dodajKrawedz(2138, w2, w3);
-
-    /* cout << test.dajKoncowyWierzcholek1(k1)->dajWartosc() << '\n'; */
-    /* cout << test.dajKoncowyWierzcholek2(k1)->dajWartosc() << '\n'; */
-    cout << test.czySasiedzi(w1, w2) << '\n';
-    cout << test.czySasiedzi(w2, w3) << '\n';
-    cout << test.czySasiedzi(w1, w3) << '\n';
-    cout << '\n';
-
-    l= test.dajKoncoweWierzcholki(k1);
-    cout << (*l)[0]->dajWartosc()->dajWartosc() << '\n';
-    cout << (*l)[1]->dajWartosc()->dajWartosc() << '\n';
-    /* cout << (*l)[2]->dajWartosc()->dajWartosc() << '\n'; */
-    
-    
-    /* cout << '\n'; */
-    /* test.drukujMacierz(); */
     
     
     cout << "Koniec programu!\n";

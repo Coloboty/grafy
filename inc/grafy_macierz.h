@@ -94,6 +94,7 @@ public:
     ~graf_macierz(){
 	delete wierzcholki;
 	delete krawedzie;
+	delete[] macierz;
     }
     
     /* --- */
@@ -179,12 +180,12 @@ public:
 	lista< mkrawedz<T, K>* > *l= new lista< mkrawedz<T, K>* >;
 
 	for(uint i= 0; i < rozmiar; i++){
-	    k= zMacierzy(klucz, i);
+	    k= zMacierzy(i, klucz);
 	    if(k != nullptr)
-		l->dodajZa(k->dajWartosc(), l->dajPierwsze());
-
-	    return l;
+		l->dodajZa(k, l->dajPierwsze());
 	}
+	
+	return l;
     }
 
     bool czySasiedzi(mwierzcholek<T> *w1, mwierzcholek<T> *w2){

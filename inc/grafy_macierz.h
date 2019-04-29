@@ -101,6 +101,9 @@ public:
 
     mwierzcholek<T> *dodajWierzcholek(T wartosc){
 	mwierzcholek<T> *nowy_wierzcholek= new mwierzcholek<T>(wartosc, wierzcholki->dajRozmiar());
+	/*  */
+	cout << nowy_wierzcholek->dajKlucz() << "\n";
+	/*  */
 	ogniwo< mwierzcholek<T>* > *miejsce_nowego= wierzcholki->dodajZa(nowy_wierzcholek, wierzcholki->dajPierwsze());
 	nowy_wierzcholek->zmienMiejsce(miejsce_nowego);
 	return nowy_wierzcholek;
@@ -113,6 +116,8 @@ public:
 
 	doMacierzy(w1->dajKlucz(), w2->dajKlucz(), nowa_krawedz);
 	doMacierzy(w2->dajKlucz(), w1->dajKlucz(), nowa_krawedz);
+
+	/* cout << "utworzono miedzy" << w1->dajKlucz() << " a " << w2->dajKlucz() << '\n'; */
 
 	return nowa_krawedz;
     }
@@ -174,10 +179,10 @@ public:
     }
 
     /* tutaj przydałby się shared_ptr */
-    lista< mkrawedz<T, K>* > *dajIncydentneKrawedzie(mwierzcholek<T> *w){
+    shared_ptr< lista< mkrawedz<T, K>* > > dajIncydentneKrawedzie(mwierzcholek<T> *w){
 	mkrawedz<T, K> *k;
 	uint klucz= w->dajKlucz();
-	lista< mkrawedz<T, K>* > *l= new lista< mkrawedz<T, K>* >;
+	shared_ptr< lista< mkrawedz<T, K>* > > l= make_shared< lista< mkrawedz<T, K>* > >();
 
 	for(uint i= 0; i < rozmiar; i++){
 	    k= zMacierzy(i, klucz);

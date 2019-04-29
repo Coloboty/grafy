@@ -14,17 +14,9 @@ int main(void){
     mwierzcholek<int> *w;
     uint rozmiar= 10;
 
-    /*
-    test= make_shared< graf_macierz<int, int> >(10);
-   
-    w= test->dodajWierzcholek(2137);
-    test->dodajKrawedz(10, test->dodajWierzcholek(21), w);
-    test->dodajKrawedz(10, test->dodajWierzcholek(37), w);
-    test->dodajKrawedz(10,
-		       test->dajWierzcholki()->dajOgniwo(1)->dajWartosc(),
-		       test->dajWierzcholki()->dajOgniwo(2)->dajWartosc());
-    */
+    test= make_shared< graf_macierz<int, int> >(rozmiar);
     test= losowyGraf(rozmiar, 20);
+    
     cout << "graf ma " << test->dajWierzcholki()->dajRozmiar() << " wierzcholkow i " <<
 	test->dajKrawedzie()->dajRozmiar() << " krawedzi.\n";
 
@@ -34,7 +26,16 @@ int main(void){
 	    test->dajIncydentneKrawedzie(w)->dajRozmiar() <<
 	    " krawedzi\n";
     }
-    /* mKruskal(test); */
+
+    test->drukujMacierz();
+    cout << '\n';
+    cout << test->dajWierzcholki()->dajOgniwo(1)->dajWartosc()->dajKlucz() << '\n';
+    
+    /* test->usunWierzcholek(test->dajWierzcholki()->dajOgniwo(1)->dajWartosc()); */
+    /* cout << "\n\n\n\n"; */
+    /* test->drukujMacierz(); */
+    
+/* mKruskal(test); */
     
     cout << "Koniec programu!\n";
     return 0;
@@ -43,11 +44,13 @@ int main(void){
 shared_ptr< graf_macierz<int, int> > losowyGraf(uint rozmiar, uint gestosc){
     shared_ptr< graf_macierz<int, int> > graf= make_shared< graf_macierz<int, int> >(rozmiar);
     mwierzcholek<int> *obecny, *poprzedni;
+    mkrawedz<int, int> *krawedz;
+    shared_ptr< lista< mkrawedz<int, int>* > > lista;
     uint max_krawedzi= (rozmiar*(rozmiar-1))/2;
-    /* uint cel_krawedzi= (gestosc*max_krawedzi)/100; */
+    uint cel_krawedzi= (gestosc*max_krawedzi)/100;
     /* Nie ma sensu generować grafów mniejszych niż 10 */
-    if(rozmiar < 10)
-	return nullptr;
+    /* if(rozmiar < 10) */
+	/* return nullptr; */
     
     /* Minimalna gęstość grafu spójnego to (2/n) */
     if(gestosc < (2*100)/rozmiar)
@@ -63,14 +66,39 @@ shared_ptr< graf_macierz<int, int> > losowyGraf(uint rozmiar, uint gestosc){
 	/* graf->dodajKrawedz(rand() % 1000, poprzedni, obecny); */
     }
 
+    cout << "Stworzono wierzcholki\n";
+    cout << "Maksymalna liczba krawedzi to " << max_krawedzi << '\n';
+    cout << "Stworzono wierzcholki\n";
+
     /* Zrób z nich graf zupełny */
     for(uint i= 0; graf->dajKrawedzie()->dajRozmiar() < max_krawedzi; i++){
 	poprzedni= graf->dajWierzcholki()->dajOgniwo(i)->dajWartosc();
 	for(uint j= i+1; j <= rozmiar-1; j++){
-	    obecny= graf->dajWierzcholki()->dajOgniwo(i+1)->dajWartosc();
-	    graf->dodajKrawedz(rand() % 1000, poprzedni, obecny);
+	    obecny= graf->dajWierzcholki()->dajOgniwo(j)->dajWartosc();
+	    graf->dodajKrawedz((rand() % 1000)+1000, poprzedni, obecny);
 	}
     }
+
+    cout << "Stworzono graf zupełny\n";
+    cout << "Docelowo ma być " << cel_krawedzi << " krawędzi\n";
+
+    while(graf->dajKrawedzie()->dajRozmiar() > cel_krawedzi){
+	obecny= graf->dajWierzcholki()->dajOgniwo(rand()%(rozmiar-1))->dajWartosc();
+	lista= graf->dajIncydentneKrawedzie(obecny);
+	/* graf->dajIncydentneKrawedzie(obecny)->dajRozmiar(); */
+	if(lista->dajRozmiar() > 1){
+	    krawedz= lista->dajOgniwo(rand()%(lista->dajRozmiar()-1))->dajWartosc();
+	    poprzedni= graf->dajPrzeciwleglyWierzcholek(obecny, krawedz);
+	    if(graf->dajIncydentneKrawedzie(poprzedni)->dajRozmiar() > 1)
+		graf->usunKrawedz(krawedz);
+	}
+	
+	/* if(i >= rozmiar) */
+	    /* i= 0; */
+    }
+
+    cout << "Usunięto krawędzie\n";
+    
     
 
     /* cout << "funkcja sie wykonala\n"; */

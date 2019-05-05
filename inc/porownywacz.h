@@ -11,7 +11,7 @@ public:
 	return a->dajWartosc() > b->dajWartosc();
     }
 
-    bool operator()(mwierzcholek<T> *a, mwierzcholek<T> *b){
+    bool operator()(mwierzcholek<T, K> *a, mwierzcholek<T, K> *b){
 	return a->dajWartosc() > b->dajWartosc();
     }
 };

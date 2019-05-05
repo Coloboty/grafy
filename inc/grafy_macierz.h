@@ -6,25 +6,33 @@
 
 using namespace std;
 
-template <typename T>
+template <typename T, typename K>
 class mwierzcholek{
 private:
     T wartosc;
     uint klucz;
-    ogniwo< mwierzcholek<T>* > *miejsce;
+    ogniwo< mwierzcholek<T, K>* > *miejsce;
+    /* shared_ptr< lista< lkrawedz<T, K>* > > incydencje; */
     
 public:
     mwierzcholek(T w, uint k){
 	wartosc= w;
 	klucz= k;
+	/* incydencje= make_shared< lista< lkrawedz<T, K>* > >(); */
+    }
+
+    mwierzcholek(){
+	wartosc= 0;
+	klucz= 0;
+	/* incydencje= make_shared< lista< lkrawedz<T, K>* > >(); */
     }
         
-    void zmienMiejsce(ogniwo< mwierzcholek<T>* > *moje) {miejsce= moje;}
+    void zmienMiejsce(ogniwo< mwierzcholek<T, K>* > *moje) {miejsce= moje;}
     void zmienWartosc(T nowa) {wartosc= nowa;}
     void zmienKlucz(uint k) {klucz= k;}
     
     T dajWartosc(void) {return wartosc;}
-    ogniwo< mwierzcholek<T>* > *dajMiejsce(void) {return miejsce;}
+    ogniwo< mwierzcholek<T, K>* > *dajMiejsce(void) {return miejsce;}
     uint dajKlucz(void) {return klucz;}
 };
 
@@ -34,29 +42,38 @@ template <typename T, typename K>
 class mkrawedz{
 private:
     K wartosc;
-    ogniwo< mkrawedz<T, K>* > *miejsce;
-    mwierzcholek<T> *w1, *w2;
+    /* ogniwo< mkrawedz<T, K>* > *miejsce; */
+    mwierzcholek<T, K> *w1, *w2;
 
 public:
-    mkrawedz(K w, mwierzcholek<T> *w_1, mwierzcholek<T> *w_2){
+    mkrawedz(K w, mwierzcholek<T, K> *w_1, mwierzcholek<T, K> *w_2){
 	wartosc= w;
 	w1= w_1;
 	w2= w_2;
     }
 
+    mkrawedz(){
+	wartosc= 0;
+	w1= nullptr;
+	w2= nullptr;
+    }
+
     void zmienWartosc(K nowa) {wartosc= nowa;}
     K dajWartosc(void) {return wartosc;}
-    
-    void zmienMiejsce(ogniwo< mkrawedz<T, K>* > *nowe) {miejsce= nowe;}
-    ogniwo< mkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;}
-    
-    mwierzcholek<T> *dajWierzcholek1(void) {return w1;}
-    mwierzcholek<T> *dajWierzcholek2(void) {return w2;}
 
-    shared_ptr< lista< mwierzcholek<T>* > > dajWierzcholki(void){
-	shared_ptr< lista< mwierzcholek<T>* > > liz= make_shared< lista< mwierzcholek<T>* > >();
-	liz->dodajZa(w1, liz->dajPierwsze());
-	liz->dodajZa(w2, liz->dajPierwsze());
+    void zmienW1(mwierzcholek<T, K> *w) {w1= w;}
+    void zmienW2(mwierzcholek<T, K> *w) {w2= w;}
+    
+    /* void zmienMiejsce(ogniwo< mkrawedz<T, K>* > *nowe) {miejsce= nowe;} */
+    /* ogniwo< mkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;} */
+    
+    mwierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
+    mwierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
+
+    shared_ptr< lista< mwierzcholek<T, K>* > > dajWierzcholki(void){
+	shared_ptr< lista< mwierzcholek<T, K>* > > liz= make_shared< lista< mwierzcholek<T, K>* > >();
+	liz->dodajOgniwo(w1);
+	liz->dodajOgniwo(w2);
 	return liz;
     }
 };
@@ -66,109 +83,95 @@ public:
 template <typename T, typename K>
 class graf_macierz{
 private:
-    uint rozmiar;
-    lista< mwierzcholek<T>* > *wierzcholki;
-    lista< mkrawedz<T, K>* > *krawedzie;
+    uint rozmiar, max_krawedzi, liczba_krawedzi, liczba_wierzcholkow, gestosc;
+    mwierzcholek<T, K> *wierzcholki;
+    mkrawedz<T, K> *krawedzie;
     mkrawedz<T, K> **macierz;
 
     mkrawedz<T, K> *zMacierzy(uint r, uint k) {return macierz[r*rozmiar + k];}
     
     void doMacierzy(uint r, uint k, mkrawedz<T, K> *elem){
-	if(r >= rozmiar || k >= rozmiar)
+	if(r >= rozmiar || k >= rozmiar || r == k)
 	    return;
 	macierz[r*rozmiar + k]= elem;
     }
     
 public:
-    graf_macierz(uint n){
-	wierzcholki= new lista< mwierzcholek<T>* >;
-	krawedzie= new lista< mkrawedz<T, K>* >;
-
+    graf_macierz(uint n, uint g){
 	rozmiar= n;
-	macierz= new mkrawedz<T, K>*[n*n];
+	gestosc= g;
+	max_krawedzi= (rozmiar*(rozmiar-1))/2;
+	liczba_krawedzi= 0;
+	liczba_wierzcholkow= 0;
+	wierzcholki= new mwierzcholek<T, K>[rozmiar];
+
+	/* Zawsze rezerwujemy wystarczająco dużo pamięci na pełny graf, */
+	/* bo tak łatwiej */
+	krawedzie= new mkrawedz<T, K>[max_krawedzi];
+
 	
-	for(uint i= 0; i < n; i++)
+	macierz= new mkrawedz<T, K>*[rozmiar*rozmiar];
+
+	/* Porządek w macierzy i klucze po kolei */
+	for(uint i= 0; i < rozmiar; i++){
 	    macierz[i]= nullptr;
+	    wierzcholki[i].zmienKlucz(i);
+	}
     }
 
     ~graf_macierz(){
-	delete wierzcholki;
-	delete krawedzie;
+	delete[] wierzcholki;
+	delete[] krawedzie;
 	delete[] macierz;
     }
     
-    /* --- */
+    /* Metody główne */
 
-    mwierzcholek<T> *dodajWierzcholek(T wartosc){
-	mwierzcholek<T> *nowy_wierzcholek= new mwierzcholek<T>(wartosc, wierzcholki->dajRozmiar());
-	/*  */
-	cout << nowy_wierzcholek->dajKlucz() << "\n";
-	/*  */
-	ogniwo< mwierzcholek<T>* > *miejsce_nowego= wierzcholki->dodajZa(nowy_wierzcholek, wierzcholki->dajPierwsze());
-	nowy_wierzcholek->zmienMiejsce(miejsce_nowego);
-	return nowy_wierzcholek;
+    mwierzcholek<T, K> *dodajWierzcholek(T wartosc){
+	mwierzcholek<T, K> *w= wierzcholki + liczba_wierzcholkow;
+	
+	if(liczba_wierzcholkow >= rozmiar)
+	    return nullptr;
+
+	zmienWartosc(w, wartosc);
+	
+	liczba_wierzcholkow++;
+	
+	return w;
     }
 
-    mkrawedz<T, K> *dodajKrawedz(K wartosc, mwierzcholek<T> *w1, mwierzcholek<T> *w2){
-	mkrawedz<T, K> *nowa_krawedz= new mkrawedz<T, K>(wartosc, w1, w2);
-	ogniwo< mkrawedz<T, K>* > *miejsce_nowej= krawedzie->dodajZa(nowa_krawedz, krawedzie->dajPierwsze());
-	nowa_krawedz->zmienMiejsce(miejsce_nowej);
+    mkrawedz<T, K> *dodajKrawedz(K wartosc, mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
+	mkrawedz<T, K> *nowa_krawedz= krawedzie + liczba_krawedzi;
+	
+	if(liczba_krawedzi >= max_krawedzi)
+	    return nullptr;
 
+	nowa_krawedz->zmienWartosc(wartosc);
+	nowa_krawedz->zmienW1(w1);
+	nowa_krawedz->zmienW2(w2);
+	
 	doMacierzy(w1->dajKlucz(), w2->dajKlucz(), nowa_krawedz);
 	doMacierzy(w2->dajKlucz(), w1->dajKlucz(), nowa_krawedz);
-
-	/* cout << "utworzono miedzy" << w1->dajKlucz() << " a " << w2->dajKlucz() << '\n'; */
+	
+	liczba_krawedzi++;
 
 	return nowa_krawedz;
     }
 
-    void usunWierzcholek(mwierzcholek<T> *w){
-	mkrawedz<T, K> *k;
-	uint klucz= w->dajKlucz();
-
-	for(uint i= 0; i < rozmiar; i++){
-	    k= zMacierzy(klucz, i);
-	    if(k != nullptr){
-		delete k;
-		doMacierzy(klucz, i, nullptr);
-		doMacierzy(i, klucz, nullptr);
-	    }
-	}
-	
-	wierzcholki->usunOgniwo(w->dajMiejsce());
-	delete w;
-    }
-
-    void usunKrawedz(mkrawedz<T, K> *k){
-	uint klucz1, klucz2;
-	klucz1= k->dajWierzcholek1()->dajKlucz();
-	klucz2= k->dajWierzcholek2()->dajKlucz();
-
-	doMacierzy(klucz1, klucz2, nullptr);
-	doMacierzy(klucz2, klucz1, nullptr);
-
-	krawedzie->usunOgniwo(k->dajMiejsce());
-	delete k;
-    }
-
-    void zmienWartosc(mwierzcholek<T> *w, T nowa) {w->zmienWartosc(nowa);}
+    void zmienWartosc(mwierzcholek<T, K> *w, T nowa) {w->zmienWartosc(nowa);}
     void zmienWartosc(mkrawedz<T, K> *k, K nowa) {k->zmienWartosc(nowa);}
-    T dajWartosc(mwierzcholek<T> *w) {return w->dajWartosc();}
+    T dajWartosc(mwierzcholek<T, K> *w) {return w->dajWartosc();}
     K dajWartosc(mkrawedz<T, K> *k) {return k->dajWartosc();}
 
     /* --- */
     
-    mwierzcholek<T> *dajKoncowyWierzcholek1(mkrawedz<T, K> *k) {return k->dajWierzcholek1();}
-    mwierzcholek<T> *dajKoncowyWierzcholek2(mkrawedz<T, K> *k){return k->dajWierzcholek2();}
+    mwierzcholek<T, K> *dajKoncowyWierzcholek1(mkrawedz<T, K> *k) {return k->dajWierzcholek1();}
+    mwierzcholek<T, K> *dajKoncowyWierzcholek2(mkrawedz<T, K> *k){return k->dajWierzcholek2();}
 
-    shared_ptr< lista< mwierzcholek<T>* > > dajKoncoweWierzcholki(mkrawedz<T, K> *k){
-	return k->dajWierzcholki();
-    }
-
-    mwierzcholek<T> *dajPrzeciwleglyWierzcholek(mwierzcholek<T> *w, mkrawedz<T, K> *k){
-	mwierzcholek<T> *w1, *w2;
-	w1= k->dajWierzcholki()->dajOgniwo(0)->dajWartosc();
-	w2= k->dajWierzcholki()->dajOgniwo(1)->dajWartosc();
+    mwierzcholek<T, K> *dajPrzeciwleglyWierzcholek(mwierzcholek<T, K> *w, mkrawedz<T, K> *k){
+	mwierzcholek<T, K> *w1, *w2;
+	w1= k->dajWierzcholek1();
+	w2= k->dajWierzcholek2();
 
 	if(w == w1)
 	    return w2;
@@ -178,8 +181,7 @@ public:
 	    return nullptr;
     }
 
-    /* tutaj przydałby się shared_ptr */
-    shared_ptr< lista< mkrawedz<T, K>* > > dajIncydentneKrawedzie(mwierzcholek<T> *w){
+    shared_ptr< lista< mkrawedz<T, K>* > > dajIncydentneKrawedzie(mwierzcholek<T, K> *w){
 	mkrawedz<T, K> *k;
 	uint klucz= w->dajKlucz();
 	shared_ptr< lista< mkrawedz<T, K>* > > l= make_shared< lista< mkrawedz<T, K>* > >();
@@ -187,13 +189,29 @@ public:
 	for(uint i= 0; i < rozmiar; i++){
 	    k= zMacierzy(i, klucz);
 	    if(k != nullptr)
-		l->dodajZa(k, l->dajPierwsze());
+		l->dodajOgniwo(k);
 	}
 	
 	return l;
     }
 
-    bool czySasiedzi(mwierzcholek<T> *w1, mwierzcholek<T> *w2){
+    uint dajLiczbeIncydencji(mwierzcholek<T, K> *w){
+	uint klucz, licznik;
+	mkrawedz<T, K> *k;
+	
+	licznik=  0;
+	klucz= w->dajKlucz();
+	
+	for(uint i= 0; i < rozmiar; i++){
+	    k= zMacierzy(klucz, i);
+	    if(k != nullptr)
+		licznik++;
+	}
+
+	return licznik;
+    }
+
+    bool czySasiedzi(mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
 	uint klucz1, klucz2;
 	mkrawedz<T, K> *k;
 	klucz1= w1->dajKlucz();
@@ -210,10 +228,14 @@ public:
 	mkrawedz<T, K> *k;
 	
 	for(uint i= 0; i < rozmiar; i++){
-	    for(uint j= 0; j < rozmiar; j++){
+	    for(uint j= 0; j <= rozmiar-1; j++){
 		k= zMacierzy(i, j);
 		if(k != nullptr)
 		    cout << k->dajWartosc() << "   ";
+		    /* cout << "0000   "; */
+		    /* cout << k << "    "; */
+		else if(i == j)
+		    cout << "----   ";
 		else
 		    cout << "null   ";
 	    }
@@ -221,8 +243,48 @@ public:
 	}
     }
 
-    lista< mwierzcholek<T>* > *dajWierzcholki(void) {return wierzcholki;}
-    lista< mkrawedz<T, K>* > *dajKrawedzie(void) {return krawedzie;}
+    void losujMacierz(void){
+	uint dzielnik;
+
+	if(gestosc == 25 || gestosc == 75)
+	    dzielnik= 4;
+	else if(gestosc == 50)
+	    dzielnik= 2;
+	else if(gestosc == 100)
+	    dzielnik= 1;
+	srand( time(NULL) );
+
+	/* Drzewo rozpinające */
+	for(uint i= 0; i < rozmiar-1; i++){
+	    dodajKrawedz(rand()%100+1000, wierzcholki+i, wierzcholki+i+1);
+	}
+		
+	if(gestosc != 75){
+	    for(uint i= 0; i < rozmiar-1; i++){
+		for(uint j= i+2; j < rozmiar; j++){
+		    if((i+j)%dzielnik == 0){		    
+			dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
+		    }
+		}
+	    }
+	}
+	else{
+	    for(uint i= 0; i < rozmiar-1; i++){
+		for(uint j= i+2; j < rozmiar; j++){
+		    if((i+j)%dzielnik != 0){		    
+			dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
+		    }
+		}
+	    }
+	}
+    }
+    
+    mwierzcholek<T, K> *dajWierzcholek(uint i) {return &wierzcholki[i];}
+    mwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
+    mkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
+    mkrawedz<T, K> *dajKrawedz(uint i) {return &krawedzie[i];}
+
+    uint dajLiczbeKrawedzi(void) {return liczba_krawedzi;}
 };
 
 #endif

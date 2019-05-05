@@ -283,8 +283,12 @@ public:
     mwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
     mkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
     mkrawedz<T, K> *dajKrawedz(uint i) {return &krawedzie[i];}
+    mkrawedz<T, K> *dajKrawedz(mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
+	return zMacierzy(w1->dajKlucz(), w2->dajKlucz());
+    }
 
     uint dajLiczbeKrawedzi(void) {return liczba_krawedzi;}
+    uint dajRozmiar(void) {return rozmiar;}
 };
 
 #endif

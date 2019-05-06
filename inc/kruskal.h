@@ -5,6 +5,9 @@
 #include "grafy_macierz.hpp"
 #include "porownywacz.h"
 
+template<typename T, typename K>
+using drzewo= lista< krawedz<T, K>* >;
+
 template<typename T>
 class galaz {
     T elem;
@@ -82,13 +85,13 @@ public:
 };
 
 template<typename T, typename K>
-shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> > graf){
-    /* lista< mwierzcholek<T, K>* > wierzcholki_grafu; */
-    priority_queue<mkrawedz<T, K>*, vector<mkrawedz<T, K>*>, porownywacz<T, K>> kolejka;
-    shared_ptr< lista< mkrawedz<T, K> *> > drzewo= make_shared< lista< mkrawedz<T, K> *> >();
-    mwierzcholek<T, K> *w1, *w2;
-    mkrawedz<T, K> *k;
-    las_zbiorow<mwierzcholek<T, K> *> *las;
+    shared_ptr<drzewo<T, K>> mKruskal(shared_ptr< graf_macierz<T, K> > graf){
+    /* lista< wierzcholek<T, K>* > wierzcholki_grafu; */
+    priority_queue<krawedz<T, K>*, vector<krawedz<T, K>*>, porownywacz<T, K>> kolejka;
+    shared_ptr<drzewo<int, int>> mst= make_shared<drzewo<int, int>>();
+    wierzcholek<T, K> *w1, *w2;
+    krawedz<T, K> *k;
+    las_zbiorow<wierzcholek<T, K> *> *las;
     uint *kolory;
     uint licznik, rozmiar, l_krawedzi;
     
@@ -96,7 +99,7 @@ shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> >
     rozmiar= graf->dajRozmiar();
     l_krawedzi= graf->dajLiczbeKrawedzi();
 
-    las= new las_zbiorow<mwierzcholek<T, K> *>(rozmiar);
+    las= new las_zbiorow<wierzcholek<T, K> *>(rozmiar);
 
     kolory= (uint*)malloc(sizeof(uint)*graf->dajRozmiar());
     for(uint i= 0; i < rozmiar; i++){
@@ -113,12 +116,12 @@ shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> >
 	/* kolejka.pop(); */
 	k= kolejka.top();
 	kolejka.pop();
-	w1= k->dajWierzcholek1();
-	w2= k->dajWierzcholek2();
+	w1= k->dajW1();
+	w2= k->dajW2();
 
 	if(las->szukaj(w1->dajKlucz()) != las->szukaj(w2->dajKlucz())){
 	    las->polacz(w1->dajKlucz(), w2->dajKlucz());
-	    drzewo->dodajOgniwo(k);
+	    mst->dodajOgniwo(k);
 	    licznik++;
 	}
 	
@@ -126,7 +129,7 @@ shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> >
 
     delete[] kolory;
     delete las;
-    return drzewo;
+    return mst;
 }
 
 #endif

@@ -3,92 +3,28 @@
 #include "lista.hpp"
 #include "grafy_lista.hpp"
 #include "grafy_macierz.hpp"
+#include "funkcje_pomocnicze.hpp"
 #include "kruskal.hpp"
 #include "prim.hpp"
 
 using namespace std;
-using namespace std::chrono;
-typedef high_resolution_clock zegar;
-typedef zegar::time_point czas;
 
-unsigned long obliczCzas(czas start, czas stop, char jednostka){
-    switch(jednostka){
-    case 's':
-	
-	break;
-    case 'm':
-	return duration_cast<milliseconds>(stop-start).count();
-	break;
-    case 'u':
-	return duration_cast<microseconds>(stop-start).count();
-	break;
-    case 'n':
-	return duration_cast<nanoseconds>(stop-start).count();
-	break;
-
-    default:
-	return 0;
-    }
-
-    return 0;
-}
-
-template<typename T>
-bool testujSpojnoscGrafu(T graf){
-/* bool testujSpojnoscGrafu(shared_ptr< lista< mkrawedz<T, K> *> > graf){ */
-    
-    uint rozmiar= graf->dajRozmiar();
-    for(uint i= 0; i < rozmiar; i++){
-	if(graf->dajLiczbeIncydencji(graf->dajWierzcholek(i)) == 0)
-	    return false;
-    }
-
-    return true;
-}
-
-template<typename T, typename K>
-void rekonstruujGraf(T graf, T rek, K drzewo){
-    /* shared_ptr<T> rek= make_shared<T>(); */
-    for(uint i= 0; i < drzewo->dajRozmiar(); i++){
-	/* k= drzewo->dajOgniwo(i)->dajWartosc(); */
-	
-	/* cout << k->dajWartosc() << ", "; */
-	
-	/* w1= k->dajWierzcholek1(); */
-	/* w2= k->dajWierzcholek2(); */
-	rek->dodajKrawedz(drzewo->dajOgniwo(i)->dajWartosc()->dajWartosc(),
-			  drzewo->dajOgniwo(i)->dajWartosc()->dajWierzcholek1(),
-			  drzewo->dajOgniwo(i)->dajWartosc()->dajWierzcholek2()
-	    );
-	/* cout << w1->dajKlucz() << "---" << w2->dajKlucz() << '\n'; */
-    }
-}
-/*
-shared_ptr<int> beka(void){
-    shared_ptr<int> tab= make_shared<int>();
-    
-    for(uint i= 0; i < 10; i++){
-	tab[i]= i;
-    }
-
-    return tab;
-}
-*/
 int main(void){
-    /* shared_ptr< graf_macierz<int, int> > test, rek; */
-    /* shared_ptr< lista< mkrawedz<int, int> *> > drzewo; */
-    shared_ptr< graf_lista<int, int> > test, rek;
-    shared_ptr< lista< lkrawedz<int, int> *> > drzewo;
+    shared_ptr< graf_macierz<int, int> > test, rek;
+    /* shared_ptr< lista< krawedz<int, int> *> > mst; */
+    shared_ptr<drzewo<int, int>> mst;
+
     uint rozmiar, gestosc;
     czas start, stop;
     rozmiar= 10;
     gestosc= 100;
     
     
-    /* test= make_shared< graf_macierz<int, int> >(rozmiar, gestosc); */
-    /* rek= make_shared< graf_macierz<int, int> >(rozmiar, gestosc); */
+    test= make_shared< graf_macierz<int, int> >(rozmiar);
+    rek= make_shared< graf_macierz<int, int> >(rozmiar);
     start= zegar::now();
-    /* test->losujMacierz(); */
+    test->losujMacierz(gestosc);
+
     stop= zegar::now();
     
 
@@ -101,28 +37,28 @@ int main(void){
 
 
     start= zegar::now();
-    drzewo= mPrim(test, *test->dajKrawedz(0));
+    mst= mKruskal(test);
+
     stop= zegar::now();
 
     cout << "Wykonano alg. Kruskala w " << obliczCzas(start, stop, 'm') << " ms\n";
+    
+    cout << "mst ma " << mst->dajRozmiar() << " krawedzi\n\n";
 
-    cout << "Drzewo ma " << drzewo->dajRozmiar() << " krawedzi\n\n";
-
-    return 0;
     /*
-    for(uint i= 0; i < drzewo->dajRozmiar(); i++){
-	k= drzewo->dajOgniwo(i)->dajWartosc();
+    for(uint i= 0; i < mst->dajRozmiar(); i++){
+	k= mst->dajOgniwo(i)->dajWartosc();
 	
 	w1= k->dajWierzcholek1();
 	w2= k->dajWierzcholek2();
 	rek->dodajKrawedz(2137, w1, w2);
     }
     */
-    rekonstruujGraf(test, rek, drzewo);
+    rekonstruujGraf(rek, test, mst);
     cout << '\n';
 
     cout << testujSpojnoscGrafu(rek) << '\n';
-    
+
     cout << "Koniec programu!\n";
     return 0;
 }

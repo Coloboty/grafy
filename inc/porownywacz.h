@@ -7,11 +7,11 @@
 template <typename T, typename K>
 struct porownywacz{
 public:
-    bool operator()(mkrawedz<T, K> *a, mkrawedz<T, K> *b){
+    bool operator()(krawedz<T, K> *a, krawedz<T, K> *b){
 	return a->dajWartosc() > b->dajWartosc();
     }
 
-    bool operator()(mwierzcholek<T, K> *a, mwierzcholek<T, K> *b){
+    bool operator()(wierzcholek<T, K> *a, wierzcholek<T, K> *b){
 	return a->dajWartosc() > b->dajWartosc();
     }
 };

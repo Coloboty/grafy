@@ -3,114 +3,43 @@
 
 #include <iostream>
 #include <memory>
+#include "grafy_klasy.h"
 
 using namespace std;
-
-template <typename T, typename K>
-class mwierzcholek{
-private:
-    T wartosc;
-    uint klucz;
-    ogniwo< mwierzcholek<T, K>* > *miejsce;
-    /* shared_ptr< lista< lkrawedz<T, K>* > > incydencje; */
-    
-public:
-    mwierzcholek(T w, uint k){
-	wartosc= w;
-	klucz= k;
-	/* incydencje= make_shared< lista< lkrawedz<T, K>* > >(); */
-    }
-
-    mwierzcholek(){
-	wartosc= 0;
-	klucz= 0;
-	/* incydencje= make_shared< lista< lkrawedz<T, K>* > >(); */
-    }
-        
-    void zmienMiejsce(ogniwo< mwierzcholek<T, K>* > *moje) {miejsce= moje;}
-    void zmienWartosc(T nowa) {wartosc= nowa;}
-    void zmienKlucz(uint k) {klucz= k;}
-    
-    T dajWartosc(void) {return wartosc;}
-    ogniwo< mwierzcholek<T, K>* > *dajMiejsce(void) {return miejsce;}
-    uint dajKlucz(void) {return klucz;}
-};
-
-/* ----------------------------- */
-
-template <typename T, typename K>
-class mkrawedz{
-private:
-    K wartosc;
-    /* ogniwo< mkrawedz<T, K>* > *miejsce; */
-    mwierzcholek<T, K> *w1, *w2;
-
-public:
-    mkrawedz(K w, mwierzcholek<T, K> *w_1, mwierzcholek<T, K> *w_2){
-	wartosc= w;
-	w1= w_1;
-	w2= w_2;
-    }
-
-    mkrawedz(){
-	wartosc= 0;
-	w1= nullptr;
-	w2= nullptr;
-    }
-
-    void zmienWartosc(K nowa) {wartosc= nowa;}
-    K dajWartosc(void) {return wartosc;}
-
-    void zmienW1(mwierzcholek<T, K> *w) {w1= w;}
-    void zmienW2(mwierzcholek<T, K> *w) {w2= w;}
-    
-    /* void zmienMiejsce(ogniwo< mkrawedz<T, K>* > *nowe) {miejsce= nowe;} */
-    /* ogniwo< mkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;} */
-    
-    mwierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
-    mwierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
-
-    shared_ptr< lista< mwierzcholek<T, K>* > > dajWierzcholki(void){
-	shared_ptr< lista< mwierzcholek<T, K>* > > liz= make_shared< lista< mwierzcholek<T, K>* > >();
-	liz->dodajOgniwo(w1);
-	liz->dodajOgniwo(w2);
-	return liz;
-    }
-};
 
 /* ----------------------------- */
 
 template <typename T, typename K>
 class graf_macierz{
 private:
-    uint rozmiar, max_krawedzi, liczba_krawedzi, liczba_wierzcholkow, gestosc;
-    mwierzcholek<T, K> *wierzcholki;
-    mkrawedz<T, K> *krawedzie;
-    mkrawedz<T, K> **macierz;
+    uint rozmiar, max_krawedzi;
+    uint l_krawedzi, l_wierzcholkow;
+    wierzcholek<T, K> *wierzcholki;
+    krawedz<T, K> *krawedzie;
+    krawedz<T, K> **macierz;
 
-    mkrawedz<T, K> *zMacierzy(uint r, uint k) {return macierz[r*rozmiar + k];}
+    krawedz<T, K> *zMacierzy(uint r, uint k) {return macierz[r*rozmiar + k];}
     
-    void doMacierzy(uint r, uint k, mkrawedz<T, K> *elem){
+    void doMacierzy(uint r, uint k, krawedz<T, K> *elem){
 	if(r >= rozmiar || k >= rozmiar || r == k)
 	    return;
 	macierz[r*rozmiar + k]= elem;
     }
     
 public:
-    graf_macierz(uint n, uint g){
+    graf_macierz(uint n){
 	rozmiar= n;
-	gestosc= g;
 	max_krawedzi= (rozmiar*(rozmiar-1))/2;
-	liczba_krawedzi= 0;
-	liczba_wierzcholkow= 0;
-	wierzcholki= new mwierzcholek<T, K>[rozmiar];
+	l_krawedzi= 0;
+	l_wierzcholkow= 0;
+	wierzcholki= new wierzcholek<T, K>[rozmiar];
 
 	/* Zawsze rezerwujemy wystarczająco dużo pamięci na pełny graf, */
 	/* bo tak łatwiej */
-	krawedzie= new mkrawedz<T, K>[max_krawedzi];
+	krawedzie= new krawedz<T, K>[max_krawedzi];
 
 	
-	macierz= new mkrawedz<T, K>*[rozmiar*rozmiar];
+	macierz= new krawedz<T, K>*[rozmiar*rozmiar];
 
 	/* Porządek w macierzy i klucze po kolei */
 	for(uint i= 0; i < rozmiar; i++){
@@ -127,167 +56,41 @@ public:
     
     /* Metody główne */
 
-    mwierzcholek<T, K> *dodajWierzcholek(T wartosc){
-	mwierzcholek<T, K> *w= wierzcholki + liczba_wierzcholkow;
-	
-	if(liczba_wierzcholkow >= rozmiar)
-	    return nullptr;
+    wierzcholek<T, K> *dodajWierzcholek(T wartosc);
+    krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
 
-	zmienWartosc(w, wartosc);
-	
-	liczba_wierzcholkow++;
-	
-	return w;
-    }
-
-    mkrawedz<T, K> *dodajKrawedz(K wartosc, mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
-	mkrawedz<T, K> *nowa_krawedz= krawedzie + liczba_krawedzi;
-	
-	if(liczba_krawedzi >= max_krawedzi)
-	    return nullptr;
-
-	nowa_krawedz->zmienWartosc(wartosc);
-	nowa_krawedz->zmienW1(w1);
-	nowa_krawedz->zmienW2(w2);
-	
-	doMacierzy(w1->dajKlucz(), w2->dajKlucz(), nowa_krawedz);
-	doMacierzy(w2->dajKlucz(), w1->dajKlucz(), nowa_krawedz);
-	
-	liczba_krawedzi++;
-
-	return nowa_krawedz;
-    }
-
-    void zmienWartosc(mwierzcholek<T, K> *w, T nowa) {w->zmienWartosc(nowa);}
-    void zmienWartosc(mkrawedz<T, K> *k, K nowa) {k->zmienWartosc(nowa);}
-    T dajWartosc(mwierzcholek<T, K> *w) {return w->dajWartosc();}
-    K dajWartosc(mkrawedz<T, K> *k) {return k->dajWartosc();}
+    void zmienWartosc(wierzcholek<T, K> *w, T nowa) {w->zmienWartosc(nowa);}
+    void zmienWartosc(krawedz<T, K> *k, K nowa) {k->zmienWartosc(nowa);}
+    T dajWartosc(wierzcholek<T, K> *w) {return w->dajWartosc();}
+    K dajWartosc(krawedz<T, K> *k) {return k->dajWartosc();}
 
     /* --- */
+
+    wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k);
+
+    uint dajLiczbeIncydencji(wierzcholek<T, K> *w);
+    uint dajLiczbeIncydencji(uint klucz);
+    bool czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
+    bool czySasiedzi(uint k1, uint k2);
+
+    void losujMacierz(uint gestosc);
+    void drukujMacierz(void);
     
-    mwierzcholek<T, K> *dajKoncowyWierzcholek1(mkrawedz<T, K> *k) {return k->dajWierzcholek1();}
-    mwierzcholek<T, K> *dajKoncowyWierzcholek2(mkrawedz<T, K> *k){return k->dajWierzcholek2();}
-
-    mwierzcholek<T, K> *dajPrzeciwleglyWierzcholek(mwierzcholek<T, K> *w, mkrawedz<T, K> *k){
-	mwierzcholek<T, K> *w1, *w2;
-	w1= k->dajWierzcholek1();
-	w2= k->dajWierzcholek2();
-
-	if(w == w1)
-	    return w2;
-	else if(w == w2)
-	    return w1;
-	else
-	    return nullptr;
-    }
-
-    shared_ptr< lista< mkrawedz<T, K>* > > dajIncydentneKrawedzie(mwierzcholek<T, K> *w){
-	mkrawedz<T, K> *k;
-	uint klucz= w->dajKlucz();
-	shared_ptr< lista< mkrawedz<T, K>* > > l= make_shared< lista< mkrawedz<T, K>* > >();
-
-	for(uint i= 0; i < rozmiar; i++){
-	    k= zMacierzy(i, klucz);
-	    if(k != nullptr)
-		l->dodajOgniwo(k);
-	}
-	
-	return l;
-    }
-
-    uint dajLiczbeIncydencji(mwierzcholek<T, K> *w){
-	uint klucz, licznik;
-	mkrawedz<T, K> *k;
-	
-	licznik=  0;
-	klucz= w->dajKlucz();
-	
-	for(uint i= 0; i < rozmiar; i++){
-	    k= zMacierzy(klucz, i);
-	    if(k != nullptr)
-		licznik++;
-	}
-
-	return licznik;
-    }
-
-    bool czySasiedzi(mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
-	uint klucz1, klucz2;
-	mkrawedz<T, K> *k;
-	klucz1= w1->dajKlucz();
-	klucz2= w2->dajKlucz();
-
-	k= zMacierzy(klucz1, klucz2);
-	if(k != nullptr)
-	    return true;
-	else
-	    return false;
-    }
+    wierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
+    wierzcholek<T, K> *dajWierzcholek(uint i) {return wierzcholki+i;}
     
-    void drukujMacierz(void){
-	mkrawedz<T, K> *k;
-	
-	for(uint i= 0; i < rozmiar; i++){
-	    for(uint j= 0; j <= rozmiar-1; j++){
-		k= zMacierzy(i, j);
-		if(k != nullptr)
-		    cout << k->dajWartosc() << "   ";
-		    /* cout << "0000   "; */
-		    /* cout << k << "    "; */
-		else if(i == j)
-		    cout << "----   ";
-		else
-		    cout << "null   ";
-	    }
-	    cout << '\n';
-	}
-    }
+    krawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
+    krawedz<T, K> *dajKrawedz(uint i) {return krawedzie+i;}
 
-    void losujMacierz(void){
-	uint dzielnik;
-
-	if(gestosc == 25 || gestosc == 75)
-	    dzielnik= 4;
-	else if(gestosc == 50)
-	    dzielnik= 2;
-	else if(gestosc == 100)
-	    dzielnik= 1;
-	srand( time(NULL) );
-
-	/* Drzewo rozpinające */
-	for(uint i= 0; i < rozmiar-1; i++){
-	    dodajKrawedz(rand()%100+1000, wierzcholki+i, wierzcholki+i+1);
-	}
-		
-	if(gestosc != 75){
-	    for(uint i= 0; i < rozmiar-1; i++){
-		for(uint j= i+2; j < rozmiar; j++){
-		    if((i+j)%dzielnik == 0){		    
-			dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
-		    }
-		}
-	    }
-	}
-	else{
-	    for(uint i= 0; i < rozmiar-1; i++){
-		for(uint j= i+2; j < rozmiar; j++){
-		    if((i+j)%dzielnik != 0){		    
-			dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
-		    }
-		}
-	    }
-	}
-    }
-    
-    mwierzcholek<T, K> *dajWierzcholek(uint i) {return &wierzcholki[i];}
-    mwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
-    mkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
-    mkrawedz<T, K> *dajKrawedz(uint i) {return &krawedzie[i];}
-    mkrawedz<T, K> *dajKrawedz(mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
+    krawedz<T, K> *dajKrawedz(uint k1, uint k2) {return zMacierzy(k1, k2);}
+    krawedz<T, K> *dajKrawedz(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2){
 	return zMacierzy(w1->dajKlucz(), w2->dajKlucz());
     }
 
-    uint dajLiczbeKrawedzi(void) {return liczba_krawedzi;}
+    shared_ptr< lista< krawedz<T, K>* > > dajKrawedzie(wierzcholek<T, K> *w);
+    shared_ptr< lista< krawedz<T, K>* > > dajKrawedzie(uint klucz);
+    
+    uint dajLiczbeKrawedzi(void) {return l_krawedzi;}
     uint dajRozmiar(void) {return rozmiar;}
 };
 

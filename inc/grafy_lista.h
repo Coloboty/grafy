@@ -4,76 +4,16 @@
 #include <iostream>
 #include <memory>
 #include "lista.hpp"
+#include "grafy_klasy.h"
 
 using namespace std;
-
-template<typename T, typename K> class lkrawedz;
-
-template <typename T, typename K>
-class lwierzcholek{
-private:
-    T wartosc;
-    uint klucz;
-        
-public:
-    lwierzcholek(T w, uint k){
-	wartosc= w;
-	klucz= k;
-    }
-
-    lwierzcholek(){
-	wartosc= 0;
-	klucz= 0;
-    }
-
-    ~lwierzcholek(){
-    }
-    
-    void zmienWartosc(T nowa) {wartosc= nowa;}
-    T dajWartosc(void) {return wartosc;};
-    void zmienKlucz(uint k){klucz= k;}
-    uint dajKlucz(void) {return klucz;}
-};
-
-/* ----------------------------------------- */
-
-template <typename T, typename K>
-class lkrawedz{
-private:
-    K wartosc;
-    lwierzcholek<T, K> *w1, *w2;
-
-public:
-    lkrawedz(T w, lwierzcholek<T, K> *w_1, lwierzcholek<T, K> *w_2){
-	wartosc= w;
-	w1= w_1;
-	w2= w_2;
-    }
-
-    lkrawedz(){
-	wartosc= 0;
-	w1= nullptr;
-	w2= nullptr;
-    }
-
-    void zmienWartosc(K w) {wartosc= w;}
-    void zmienW1(lwierzcholek<T, K> *w) {w1= w;}
-    void zmienW2(lwierzcholek<T, K> *w) {w2= w;}
-
-    lwierzcholek<T, K> *dajW1(void) {return w1;}
-    lwierzcholek<T, K> *dajW2(void) {return w2;}
-
-    K dajWartosc(void) {return wartosc;}
-};
-
-/* -------------------------- */
 
 template <typename T, typename K>
 class graf_lista{
 private:
-    lwierzcholek<T, K> *wierzcholki;
-    lkrawedz<T, K> *krawedzie;
-    lista< lkrawedz<T, K>* > *incydencje;
+    wierzcholek<T, K> *wierzcholki;
+    krawedz<T, K> *krawedzie;
+    lista< krawedz<T, K>* > *incydencje;
     uint rozmiar, max_krawedzi;
     uint l_wierzcholkow, l_krawedzi;
     
@@ -83,9 +23,9 @@ public:
 	max_krawedzi= (rozmiar*(rozmiar-1))/2;
 	l_wierzcholkow= l_krawedzi= 0;
 	
-	wierzcholki= new lwierzcholek<T, K>[rozmiar];
-	krawedzie= new lkrawedz<T, K>[max_krawedzi];
-	incydencje= new lista< lkrawedz<T,K>* >[rozmiar];
+	wierzcholki= new wierzcholek<T, K>[rozmiar];
+	krawedzie= new krawedz<T, K>[max_krawedzi];
+	incydencje= new lista< krawedz<T,K>* >[rozmiar];
 
 	for(uint i= 0; i < rozmiar; i++){
 	    wierzcholki[i].zmienKlucz(i);
@@ -100,32 +40,32 @@ public:
     
     /* ------------ */
     
-    lwierzcholek<T, K> *dodajWierzcholek(T wartosc);
-    lkrawedz<T, K> *dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
-    lkrawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
-					
-    void usunWierzcholek(lwierzcholek<T, K> *w);
-    void usunKrawedz(lkrawedz<T, K> *k);
+    wierzcholek<T, K> *dodajWierzcholek(T wartosc);
+    krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
+    krawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
 
     /* --------------------- */
 
-    lwierzcholek<T, K> *dajW1(lkrawedz<T, K> *k) {return k->dajW1();}
-    lwierzcholek<T, K> *dajW2(lkrawedz<T, K> *k) {return k->dajW2();}
+    wierzcholek<T, K> *dajW1(krawedz<T, K> *k) {return k->dajW1();}
+    wierzcholek<T, K> *dajW2(krawedz<T, K> *k) {return k->dajW2();}
 
-    lwierzcholek<T, K> *dajPrzeciwleglyWierzcholek(lwierzcholek<T, K> *w, lkrawedz<T, K> *k);
+    wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k);
+    wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(uint w, krawedz<T, K> *k);
 
-    bool czySasiedzi(lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
+    bool czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
+    bool czySasiedzi(uint w1, uint w2);
 
-    lwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
-    lwierzcholek<T, K> *dajWierzcholek(uint i) {return wierzcholki+i;}
+    wierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
+    wierzcholek<T, K> *dajWierzcholek(uint i) {return wierzcholki+i;}
     
-    lkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
-    lkrawedz<T, K> *dajKrawedz(uint i) {return krawedzie+i;}
+    krawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
+    krawedz<T, K> *dajKrawedz(uint i) {return krawedzie+i;}
     
-    lista< lkrawedz<T, K>* > *dajKrawedzie(lwierzcholek<T, K> *w) {return incydencje+(w->dajKlucz());}
-    lista< lkrawedz<T, K>* > *dajKrawedzie(uint i) {return incydencje+i;}
+    lista< krawedz<T, K>* > *dajKrawedzie(wierzcholek<T, K> *w) {return incydencje+(w->dajKlucz());}
+    lista< krawedz<T, K>* > *dajKrawedzie(uint i) {return incydencje+i;}
     
-    
+    uint dajLiczbeKrawedzi(void) {return l_krawedzi;}
+    uint dajRozmiar(void) {return rozmiar;}
 };
 
 #endif

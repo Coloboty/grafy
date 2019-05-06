@@ -82,13 +82,13 @@ public:
 };
 
 template<typename T, typename K>
-shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> > graf){
-    /* lista< mwierzcholek<T, K>* > wierzcholki_grafu; */
-    priority_queue<mkrawedz<T, K>*, vector<mkrawedz<T, K>*>, porownywacz<T, K>> kolejka;
-    shared_ptr< lista< mkrawedz<T, K> *> > drzewo= make_shared< lista< mkrawedz<T, K> *> >();
-    mwierzcholek<T, K> *w1, *w2;
-    mkrawedz<T, K> *k;
-    las_zbiorow<mwierzcholek<T, K> *> *las;
+shared_ptr< lista< krawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> > graf){
+    /* lista< wierzcholek<T, K>* > wierzcholki_grafu; */
+    priority_queue<krawedz<T, K>*, vector<krawedz<T, K>*>, porownywacz<T, K>> kolejka;
+    shared_ptr< lista< krawedz<T, K> *> > drzewo= make_shared< lista< krawedz<T, K> *> >();
+    wierzcholek<T, K> *w1, *w2;
+    krawedz<T, K> *k;
+    las_zbiorow<wierzcholek<T, K> *> *las;
     uint *kolory;
     uint licznik, rozmiar, l_krawedzi;
     
@@ -96,7 +96,7 @@ shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> >
     rozmiar= graf->dajRozmiar();
     l_krawedzi= graf->dajLiczbeKrawedzi();
 
-    las= new las_zbiorow<mwierzcholek<T, K> *>(rozmiar);
+    las= new las_zbiorow<wierzcholek<T, K> *>(rozmiar);
 
     kolory= (uint*)malloc(sizeof(uint)*graf->dajRozmiar());
     for(uint i= 0; i < rozmiar; i++){

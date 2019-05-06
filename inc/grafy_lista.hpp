@@ -4,8 +4,8 @@
 #include "grafy_lista.h"
 
 template<typename T, typename K>
-lwierzcholek<T, K> *graf_lista<T, K>::dodajWierzcholek(T wartosc){
-    lwierzcholek<T, K> *nowy_wierzcholek= wierzcholki + l_wierzcholkow;
+wierzcholek<T, K> *graf_lista<T, K>::dodajWierzcholek(T wartosc){
+    wierzcholek<T, K> *nowy_wierzcholek= wierzcholki + l_wierzcholkow;
 
     if(l_wierzcholkow >= rozmiar)
 	return nullptr;
@@ -17,8 +17,8 @@ lwierzcholek<T, K> *graf_lista<T, K>::dodajWierzcholek(T wartosc){
 }
 
 template<typename T, typename K>
-lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2){
-    lkrawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
+krawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2){
+    krawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
 
     if(l_krawedzi >= max_krawedzi)
 	return nullptr;
@@ -32,8 +32,8 @@ lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1
 }
 
 template<typename T, typename K>
-lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
-    lkrawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
+krawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
+    krawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
 
     if(l_krawedzi >= max_krawedzi)
 	return nullptr;
@@ -47,23 +47,23 @@ lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
 }
 
 template<typename T, typename K>
-void graf_lista<T, K>::usunWierzcholek(lwierzcholek<T, K> *w){
+void graf_lista<T, K>::usunWierzcholek(wierzcholek<T, K> *w){
     cout << "todo\n";
 }
 
 template<typename T, typename K>
-void graf_lista<T, K>::usunKrawedz(lkrawedz<T, K> *k){
+void graf_lista<T, K>::usunKrawedz(krawedz<T, K> *k){
     cout << "todo\n";
 }
 
 template<typename T, typename K>
-lwierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(lwierzcholek<T, K> *w, lkrawedz<T, K> *k){
+wierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k){
     cout << "todo\n";
 }
 
 template<typename T, typename K>
-bool graf_lista<T, K>::czySasiedzi(lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2){
-    lista< lkrawedz<T, K>* > *l1, *l2;
+bool graf_lista<T, K>::czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2){
+    lista< krawedz<T, K>* > *l1, *l2;
     l1= w1->dajListeIncydencji();
     l2= w2->dajListeIncydencji();
 	

@@ -34,7 +34,7 @@ unsigned long obliczCzas(czas start, czas stop, char jednostka){
 
 template<typename T>
 bool testujSpojnoscGrafu(T graf){
-/* bool testujSpojnoscGrafu(shared_ptr< lista< mkrawedz<T, K> *> > graf){ */
+/* bool testujSpojnoscGrafu(shared_ptr< lista< krawedz<T, K> *> > graf){ */
     
     uint rozmiar= graf->dajRozmiar();
     for(uint i= 0; i < rozmiar; i++){
@@ -46,7 +46,7 @@ bool testujSpojnoscGrafu(T graf){
 }
 
 template<typename T, typename K>
-void rekonstruujGraf(T graf, T rek, K drzewo){
+void rekonstruujGraf(T rek, T graf, K drzewo){
     for(uint i= 0; i < drzewo->dajRozmiar(); i++){
 	rek->dodajKrawedz(drzewo->dajOgniwo(i)->dajWartosc()->dajWartosc(),
 			  drzewo->dajOgniwo(i)->dajWartosc()->dajW1(),
@@ -57,7 +57,7 @@ void rekonstruujGraf(T graf, T rek, K drzewo){
 
 int main(void){
     shared_ptr< graf_macierz<int, int> > test, rek;
-    shared_ptr< lista< mkrawedz<int, int> *> > drzewo;
+    shared_ptr< lista< krawedz<int, int> *> > drzewo;
     uint rozmiar, gestosc;
     czas start, stop;
     rozmiar= 1000;
@@ -95,7 +95,7 @@ int main(void){
 	rek->dodajKrawedz(2137, w1, w2);
     }
     */
-    rekonstruujGraf(test, rek, drzewo);
+    rekonstruujGraf(rek, test, drzewo);
     cout << '\n';
 
     cout << testujSpojnoscGrafu(rek) << '\n';

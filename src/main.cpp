@@ -65,10 +65,10 @@ int main(void){
     gestosc= 100;
     
     
-    test= make_shared< graf_macierz<int, int> >(rozmiar, gestosc);
-    rek= make_shared< graf_macierz<int, int> >(rozmiar, gestosc);
+    test= make_shared< graf_macierz<int, int> >(rozmiar);
+    rek= make_shared< graf_macierz<int, int> >(rozmiar);
     start= zegar::now();
-    test->losujMacierz();
+    test->losujMacierz(gestosc);
     stop= zegar::now();
     
 

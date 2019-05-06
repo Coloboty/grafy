@@ -12,7 +12,8 @@ using namespace std;
 template <typename T, typename K>
 class graf_macierz{
 private:
-    uint rozmiar, max_krawedzi, liczba_krawedzi, liczba_wierzcholkow, gestosc;
+    uint rozmiar, max_krawedzi;
+    uint l_krawedzi, l_wierzcholkow;
     wierzcholek<T, K> *wierzcholki;
     krawedz<T, K> *krawedzie;
     krawedz<T, K> **macierz;
@@ -26,12 +27,11 @@ private:
     }
     
 public:
-    graf_macierz(uint n, uint g){
+    graf_macierz(uint n){
 	rozmiar= n;
-	gestosc= g;
 	max_krawedzi= (rozmiar*(rozmiar-1))/2;
-	liczba_krawedzi= 0;
-	liczba_wierzcholkow= 0;
+	l_krawedzi= 0;
+	l_wierzcholkow= 0;
 	wierzcholki= new wierzcholek<T, K>[rozmiar];
 
 	/* Zawsze rezerwujemy wystarczająco dużo pamięci na pełny graf, */
@@ -57,22 +57,22 @@ public:
     /* Metody główne */
 
     wierzcholek<T, K> *dodajWierzcholek(T wartosc){
-	wierzcholek<T, K> *w= wierzcholki + liczba_wierzcholkow;
+	wierzcholek<T, K> *w= wierzcholki + l_wierzcholkow;
 	
-	if(liczba_wierzcholkow >= rozmiar)
+	if(l_wierzcholkow >= rozmiar)
 	    return nullptr;
 
 	zmienWartosc(w, wartosc);
 	
-	liczba_wierzcholkow++;
+	l_wierzcholkow++;
 	
 	return w;
     }
 
     krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2){
-	krawedz<T, K> *nowa_krawedz= krawedzie + liczba_krawedzi;
+	krawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
 	
-	if(liczba_krawedzi >= max_krawedzi)
+	if(l_krawedzi >= max_krawedzi)
 	    return nullptr;
 
 	nowa_krawedz->zmienWartosc(wartosc);
@@ -82,7 +82,7 @@ public:
 	doMacierzy(w1->dajKlucz(), w2->dajKlucz(), nowa_krawedz);
 	doMacierzy(w2->dajKlucz(), w1->dajKlucz(), nowa_krawedz);
 	
-	liczba_krawedzi++;
+	l_krawedzi++;
 
 	return nowa_krawedz;
     }
@@ -144,8 +144,6 @@ public:
 		k= zMacierzy(i, j);
 		if(k != nullptr)
 		    cout << k->dajWartosc() << "   ";
-		    /* cout << "0000   "; */
-		    /* cout << k << "    "; */
 		else if(i == j)
 		    cout << "----   ";
 		else
@@ -155,7 +153,7 @@ public:
 	}
     }
 
-    void losujMacierz(void){
+    void losujMacierz(uint gestosc){
 	uint dzielnik;
 
 	if(gestosc == 25 || gestosc == 75)
@@ -216,7 +214,7 @@ public:
 	return l;
     }
     
-    uint dajLiczbeKrawedzi(void) {return liczba_krawedzi;}
+    uint dajLiczbeKrawedzi(void) {return l_krawedzi;}
     uint dajRozmiar(void) {return rozmiar;}
 };
 

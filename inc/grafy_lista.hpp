@@ -32,6 +32,21 @@ lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1
 }
 
 template<typename T, typename K>
+lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
+    lkrawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
+
+    if(l_krawedzi >= max_krawedzi)
+	return nullptr;
+    
+    nowa_krawedz->zmienWartosc(wartosc);
+    incydencje[k1].dodajOgniwo(nowa_krawedz);
+    incydencje[k2].dodajOgniwo(nowa_krawedz);
+    l_krawedzi++;
+	
+    return nowa_krawedz;
+}
+
+template<typename T, typename K>
 void graf_lista<T, K>::usunWierzcholek(lwierzcholek<T, K> *w){
     cout << "todo\n";
 }

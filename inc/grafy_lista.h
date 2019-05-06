@@ -102,6 +102,7 @@ public:
     
     lwierzcholek<T, K> *dodajWierzcholek(T wartosc);
     lkrawedz<T, K> *dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
+    lkrawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
 					
     void usunWierzcholek(lwierzcholek<T, K> *w);
     void usunKrawedz(lkrawedz<T, K> *k);
@@ -111,20 +112,19 @@ public:
     lwierzcholek<T, K> *dajW1(lkrawedz<T, K> *k) {return k->dajW1();}
     lwierzcholek<T, K> *dajW2(lkrawedz<T, K> *k) {return k->dajW2();}
 
-    void zmienWartosc(lwierzcholek<T, K> *w, T wart) {w->zmienWartosc(wart);}
-    void zmienWartosc(lkrawedz<T, K> *k, K wart) {k->zmienWartosc(wart);}
-
     lwierzcholek<T, K> *dajPrzeciwleglyWierzcholek(lwierzcholek<T, K> *w, lkrawedz<T, K> *k);
-    
 
     bool czySasiedzi(lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
 
     lwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
     lwierzcholek<T, K> *dajWierzcholek(uint i) {return wierzcholki+i;}
+    
     lkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
-    lista< lkrawedz<T, K>* > *dajKrawedzie(lwierzcholek<T, K> *w) {return incydencje+w->dajKlucz();}
-    lista< lkrawedz<T, K>* > *dajKrawedzie(uint i) {return incydencje+i;}
     lkrawedz<T, K> *dajKrawedz(uint i) {return krawedzie+i;}
+    
+    lista< lkrawedz<T, K>* > *dajKrawedzie(lwierzcholek<T, K> *w) {return incydencje+(w->dajKlucz());}
+    lista< lkrawedz<T, K>* > *dajKrawedzie(uint i) {return incydencje+i;}
+    
     
 };
 

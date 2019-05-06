@@ -113,8 +113,8 @@ shared_ptr< lista< mkrawedz<T, K> *> > mKruskal(shared_ptr< graf_macierz<T, K> >
 	/* kolejka.pop(); */
 	k= kolejka.top();
 	kolejka.pop();
-	w1= k->dajWierzcholek1();
-	w2= k->dajWierzcholek2();
+	w1= k->dajW1();
+	w2= k->dajW2();
 
 	if(las->szukaj(w1->dajKlucz()) != las->szukaj(w2->dajKlucz())){
 	    las->polacz(w1->dajKlucz(), w2->dajKlucz());

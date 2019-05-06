@@ -47,18 +47,10 @@ bool testujSpojnoscGrafu(T graf){
 
 template<typename T, typename K>
 void rekonstruujGraf(T graf, T rek, K drzewo){
-    /* shared_ptr<T> rek= make_shared<T>(); */
     for(uint i= 0; i < drzewo->dajRozmiar(); i++){
-	/* k= drzewo->dajOgniwo(i)->dajWartosc(); */
-	
-	/* cout << k->dajWartosc() << ", "; */
-	
-	/* w1= k->dajWierzcholek1(); */
-	/* w2= k->dajWierzcholek2(); */
 	rek->dodajKrawedz(drzewo->dajOgniwo(i)->dajWartosc()->dajWartosc(),
-			  drzewo->dajOgniwo(i)->dajWartosc()->dajWierzcholek1(),
-			  drzewo->dajOgniwo(i)->dajWartosc()->dajWierzcholek2()
-	    );
+			  drzewo->dajOgniwo(i)->dajWartosc()->dajW1(),
+			  drzewo->dajOgniwo(i)->dajWartosc()->dajW2());
 	/* cout << w1->dajKlucz() << "---" << w2->dajKlucz() << '\n'; */
     }
 }

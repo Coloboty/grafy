@@ -11,28 +11,21 @@ class mwierzcholek{
 private:
     T wartosc;
     uint klucz;
-    ogniwo< mwierzcholek<T, K>* > *miejsce;
-    /* shared_ptr< lista< lkrawedz<T, K>* > > incydencje; */
-    
+            
 public:
     mwierzcholek(T w, uint k){
 	wartosc= w;
 	klucz= k;
-	/* incydencje= make_shared< lista< lkrawedz<T, K>* > >(); */
     }
 
     mwierzcholek(){
 	wartosc= 0;
 	klucz= 0;
-	/* incydencje= make_shared< lista< lkrawedz<T, K>* > >(); */
     }
-        
-    void zmienMiejsce(ogniwo< mwierzcholek<T, K>* > *moje) {miejsce= moje;}
-    void zmienWartosc(T nowa) {wartosc= nowa;}
-    void zmienKlucz(uint k) {klucz= k;}
     
+    void zmienWartosc(T nowa) {wartosc= nowa;}
     T dajWartosc(void) {return wartosc;}
-    ogniwo< mwierzcholek<T, K>* > *dajMiejsce(void) {return miejsce;}
+    void zmienKlucz(uint k) {klucz= k;}
     uint dajKlucz(void) {return klucz;}
 };
 
@@ -42,7 +35,6 @@ template <typename T, typename K>
 class mkrawedz{
 private:
     K wartosc;
-    /* ogniwo< mkrawedz<T, K>* > *miejsce; */
     mwierzcholek<T, K> *w1, *w2;
 
 public:
@@ -64,18 +56,8 @@ public:
     void zmienW1(mwierzcholek<T, K> *w) {w1= w;}
     void zmienW2(mwierzcholek<T, K> *w) {w2= w;}
     
-    /* void zmienMiejsce(ogniwo< mkrawedz<T, K>* > *nowe) {miejsce= nowe;} */
-    /* ogniwo< mkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;} */
-    
-    mwierzcholek<T, K> *dajWierzcholek1(void) {return w1;}
-    mwierzcholek<T, K> *dajWierzcholek2(void) {return w2;}
-
-    shared_ptr< lista< mwierzcholek<T, K>* > > dajWierzcholki(void){
-	shared_ptr< lista< mwierzcholek<T, K>* > > liz= make_shared< lista< mwierzcholek<T, K>* > >();
-	liz->dodajOgniwo(w1);
-	liz->dodajOgniwo(w2);
-	return liz;
-    }
+    mwierzcholek<T, K> *dajW1(void) {return w1;}
+    mwierzcholek<T, K> *dajW2(void) {return w2;}
 };
 
 /* ----------------------------- */
@@ -164,14 +146,11 @@ public:
     K dajWartosc(mkrawedz<T, K> *k) {return k->dajWartosc();}
 
     /* --- */
-    
-    mwierzcholek<T, K> *dajKoncowyWierzcholek1(mkrawedz<T, K> *k) {return k->dajWierzcholek1();}
-    mwierzcholek<T, K> *dajKoncowyWierzcholek2(mkrawedz<T, K> *k){return k->dajWierzcholek2();}
 
     mwierzcholek<T, K> *dajPrzeciwleglyWierzcholek(mwierzcholek<T, K> *w, mkrawedz<T, K> *k){
 	mwierzcholek<T, K> *w1, *w2;
-	w1= k->dajWierzcholek1();
-	w2= k->dajWierzcholek2();
+	w1= k->dajW1();
+	w2= k->dajW2();
 
 	if(w == w1)
 	    return w2;
@@ -179,20 +158,6 @@ public:
 	    return w1;
 	else
 	    return nullptr;
-    }
-
-    shared_ptr< lista< mkrawedz<T, K>* > > dajIncydentneKrawedzie(mwierzcholek<T, K> *w){
-	mkrawedz<T, K> *k;
-	uint klucz= w->dajKlucz();
-	shared_ptr< lista< mkrawedz<T, K>* > > l= make_shared< lista< mkrawedz<T, K>* > >();
-
-	for(uint i= 0; i < rozmiar; i++){
-	    k= zMacierzy(i, klucz);
-	    if(k != nullptr)
-		l->dodajOgniwo(k);
-	}
-	
-	return l;
     }
 
     uint dajLiczbeIncydencji(mwierzcholek<T, K> *w){
@@ -278,15 +243,32 @@ public:
 	    }
 	}
     }
-    
-    mwierzcholek<T, K> *dajWierzcholek(uint i) {return &wierzcholki[i];}
+
     mwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
+    mwierzcholek<T, K> *dajWierzcholek(uint i) {return wierzcholki+i;}
+    
     mkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
-    mkrawedz<T, K> *dajKrawedz(uint i) {return &krawedzie[i];}
-    mkrawedz<T, K> *dajKrawedz(mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
+    mkrawedz<T, K> *dajKrawedz(uint i) {return krawedzie+i;}
+
+    mkrawedz<T, K> *dajKrawedz(uint k1, uint k2) {return zMacierzy(k1, k2);}
+        mkrawedz<T, K> *dajKrawedz(mwierzcholek<T, K> *w1, mwierzcholek<T, K> *w2){
 	return zMacierzy(w1->dajKlucz(), w2->dajKlucz());
     }
 
+    shared_ptr< lista< mkrawedz<T, K>* > > dajKrawedzie(mwierzcholek<T, K> *w){
+	mkrawedz<T, K> *k;
+	uint klucz= w->dajKlucz();
+	shared_ptr< lista< mkrawedz<T, K>* > > l= make_shared< lista< mkrawedz<T, K>* > >();
+	
+	for(uint i= 0; i < rozmiar; i++){
+	    k= zMacierzy(i, klucz);
+	    if(k != nullptr)
+		l->dodajOgniwo(k);
+	}
+	
+	return l;
+    }
+    
     uint dajLiczbeKrawedzi(void) {return liczba_krawedzi;}
     uint dajRozmiar(void) {return rozmiar;}
 };

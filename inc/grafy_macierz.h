@@ -59,21 +59,15 @@ public:
     wierzcholek<T, K> *dodajWierzcholek(T wartosc);
     krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
 
-    void zmienWartosc(wierzcholek<T, K> *w, T nowa) {w->zmienWartosc(nowa);}
-    void zmienWartosc(krawedz<T, K> *k, K nowa) {k->zmienWartosc(nowa);}
-    T dajWartosc(wierzcholek<T, K> *w) {return w->dajWartosc();}
-    K dajWartosc(krawedz<T, K> *k) {return k->dajWartosc();}
-
+    void losujGraf(uint gestosc);
+    
     /* --- */
 
     wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k);
 
-    uint dajLiczbeIncydencji(wierzcholek<T, K> *w);
-    uint dajLiczbeIncydencji(uint klucz);
     bool czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
     bool czySasiedzi(uint k1, uint k2);
 
-    void losujMacierz(uint gestosc);
     void drukujMacierz(void);
     
     wierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
@@ -89,6 +83,9 @@ public:
 
     shared_ptr< lista< krawedz<T, K>* > > dajKrawedzie(wierzcholek<T, K> *w);
     shared_ptr< lista< krawedz<T, K>* > > dajKrawedzie(uint klucz);
+
+    uint dajLiczbeKrawedzi(wierzcholek<T, K> *w);
+    uint dajLiczbeKrawedzi(uint klucz);
     
     uint dajLiczbeKrawedzi(void) {return l_krawedzi;}
     uint dajRozmiar(void) {return rozmiar;}

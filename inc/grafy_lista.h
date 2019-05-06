@@ -38,20 +38,19 @@ public:
 	delete[] incydencje;
     }
     
-    /* ------------ */
+    /* Metody główne */
     
     wierzcholek<T, K> *dodajWierzcholek(T wartosc);
     krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
     krawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
 
+    void losujGraf(uint gestosc);
+    
     /* --------------------- */
-
-    wierzcholek<T, K> *dajW1(krawedz<T, K> *k) {return k->dajW1();}
-    wierzcholek<T, K> *dajW2(krawedz<T, K> *k) {return k->dajW2();}
 
     wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k);
     wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(uint w, krawedz<T, K> *k);
-
+    
     bool czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
     bool czySasiedzi(uint w1, uint w2);
 
@@ -63,9 +62,14 @@ public:
     
     lista< krawedz<T, K>* > *dajKrawedzie(wierzcholek<T, K> *w) {return incydencje+(w->dajKlucz());}
     lista< krawedz<T, K>* > *dajKrawedzie(uint i) {return incydencje+i;}
+
+    uint dajLiczbeKrawedzi(wierzcholek<T, K> *w) {return (incydencje+(w->dajKlucz())).dajRozmiar();}
+    uint dajLiczbeKrawedzi(uint k) {return (incydencje+k).dajRozmiar();}
     
     uint dajLiczbeKrawedzi(void) {return l_krawedzi;}
     uint dajRozmiar(void) {return rozmiar;}
 };
+
+
 
 #endif

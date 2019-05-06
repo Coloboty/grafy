@@ -99,7 +99,7 @@ int main(void){
     cout << '\n';
 
     cout << testujSpojnoscGrafu(rek) << '\n';
-    
+
     cout << "Koniec programu!\n";
     return 0;
 }

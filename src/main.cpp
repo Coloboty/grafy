@@ -26,7 +26,8 @@ int main(void){
     ltest= make_shared< graf_lista<int, int> >(rozmiar);
     mtest= make_shared< graf_macierz<int, int> >(rozmiar);
     rek= make_shared< graf_macierz<int, int> >(rozmiar);
-    
+
+    mst= make_shared< drzewo<int, int> >();
     
     start= zegar::now();
     ltest->losujGraf(gestosc);
@@ -47,17 +48,17 @@ int main(void){
 
     
     start= zegar::now();
-    mst= mKruskal(mtest);
+    prim(mtest, mst);
     stop= zegar::now();
-
-    cout << "Wykonano alg. Kruskala w " << obliczCzas(start, stop, 'm') << " ms\n";
+    
+    cout << "Wykonano alg. Prima w " << obliczCzas(start, stop, 'm') << " ms\n";
     
     cout << "mst ma " << mst->dajRozmiar() << " krawedzi\n\n";
     cout << '\n';
     
-    rekonstruujGraf(rek, mtest, mst);
+    /* rekonstruujGraf(rek, mtest, mst); */
+    /* cout << testujSpojnoscGrafu(rek) << '\n'; */
     
-    cout << testujSpojnoscGrafu(rek) << '\n';
     cout << "Koniec programu!\n";
     
     return 0;

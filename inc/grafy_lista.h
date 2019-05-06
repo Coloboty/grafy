@@ -22,6 +22,11 @@ public:
 	incydencje= new lista< lkrawedz<T, K>* >;
     }
 
+    lwierzcholek(){
+	wartosc= 0;
+	incydencje= new lista< lkrawedz<T, K>* >;
+    }
+
     ~lwierzcholek(){
 	delete incydencje;
     }
@@ -49,7 +54,6 @@ template <typename T, typename K>
 class lkrawedz{
 private:
     K wartosc;
-    ogniwo< lkrawedz<T, K>* > *miejsce, *i1, *i2;
     lwierzcholek<T, K> *w1, *w2;
 
 public:
@@ -59,16 +63,15 @@ public:
 	w2= w_2;
     }
 
-    void zmienWartosc(K w) {wartosc= w;}
-    void zmienMiejsce(ogniwo< lkrawedz<T, K>* > *moje) {miejsce= moje;}
-    void zmienIncydencje(ogniwo< lkrawedz<T, K>* > *i, lwierzcholek<T, K> *w){
-	if(w == w1)
-	    i1= i;
-	else if(w == w2)
-	    i2= i;
+    lkrawedz(){
+	wartosc= 0;
+	w1= nullptr;
+	w2= nullptr;
     }
-    
-    ogniwo< lkrawedz<T, K>* > *dajMiejsce(void) {return miejsce;}
+
+    void zmienWartosc(K w) {wartosc= w;}
+    void zmienW1(lwierzcholek<T, K> *w) {w1= w;}
+    void zmienW2(lwierzcholek<T, K> *w) {w2= w;}
     
     shared_ptr< lista< lwierzcholek<T, K>* > > dajWierzcholki(void){
 	shared_ptr< lista< lwierzcholek<T, K>* > > liz= make_shared< lista< lwierzcholek<T, K>* > >();
@@ -78,15 +81,10 @@ public:
 	return liz;
     }
 
+    lwierzcholek<T, K> *dajW1(void) {return w1;}
+    lwierzcholek<T, K> *dajW2(void) {return w2;}
+
     K dajWartosc(void) {return wartosc;}
-    ogniwo< lkrawedz<T, K>* > *dajIncydencje(lwierzcholek<T, K> *w){
-	if(w == w1)
-	    return i1;
-	else if(w == w2)
-	    return i2;
-	else
-	    return nullptr;
-    }
 };
 
 /* -------------------------- */
@@ -94,21 +92,23 @@ public:
 template <typename T, typename K>
 class graf_lista{
 private:
-    lista< lwierzcholek<T, K>* > *wierzcholki;
-    lista< lkrawedz<T, K>* > *lkrawedzie;
+    lwierzcholek<T, K> *wierzcholki;
+    lkrawedz<T, K> *krawedzie;
+    uint rozmiar, max_krawedzi;
+    uint l_wierzcholkow, l_krawedzi;
     
 public:
-    graf_lista(){
-	wierzcholki= new(lista< lwierzcholek<T, K>* >);
-	lkrawedzie= new(lista< lkrawedz<T, K>* >);
+    graf_lista(uint r){
+	rozmiar= r;
+	max_krawedzi= (rozmiar*(rozmiar-1))/2;
+	wierzcholki= new lwierzcholek<T, K>[rozmiar];
+	krawedzie= new lkrawedz<T, K>[max_krawedzi];
+	l_wierzcholkow= l_krawedzi= 0;
     }
     
     ~graf_lista(){
-	while(wierzcholki->dajRozmiar() > 0)
-	    usunWierzcholek(wierzcholki->dajPierwsze()->dajWartosc());
-	
-	delete wierzcholki;
-	delete lkrawedzie;
+	delete[] wierzcholki;
+	delete[] krawedzie;
     }
     /* ------------ */
     T dajWartosc(lwierzcholek<T, K> *w){
@@ -132,6 +132,9 @@ public:
 	return k->dajWierzcholki();
     }
 
+    lwierzcholek<T, K> *dajW1(lkrawedz<T, K> *k) {return k->dajWierzcholek1();}
+    lwierzcholek<T, K> *dajW2(lkrawedz<T, K> *k) {return k->dajWierzcholek2();}
+
     void zmienWartosc(lwierzcholek<T, K> *w, T wart) {w->zmienWartosc(wart);}
     void zmienWartosc(lkrawedz<T, K> *k, K wart) {k->zmienWartosc(wart);}
 
@@ -140,8 +143,11 @@ public:
 
     bool czySasiedzi(lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2);
 
-    lista< lwierzcholek<T, K>* > *dajWierzcholki(void) {return wierzcholki;}
-    lista< lkrawedz<T, K>* > *dajKrawedzie(void) {return lkrawedzie;}
+    lwierzcholek<T, K> *dajWierzcholki(void) {return wierzcholki;}
+    lwierzcholek<T, K> dajWierzcholek(uint i) {return wierzcholki+i;}
+    lkrawedz<T, K> *dajKrawedzie(void) {return krawedzie;}
+    lkrawedz<T, K> *dajKrawedz(uint i) {return krawedzie+i;}
+    
 };
 
 #endif

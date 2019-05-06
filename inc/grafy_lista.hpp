@@ -5,55 +5,43 @@
 
 template<typename T, typename K>
 lwierzcholek<T, K> *graf_lista<T, K>::dodajWierzcholek(T wartosc){
-    lwierzcholek<T, K> *nowy_lwierzcholek= new(lwierzcholek<T, K>)(wartosc);
-    ogniwo< lwierzcholek<T, K>* > *miejsce_nowego= wierzcholki->dodajZa(nowy_lwierzcholek, wierzcholki->dajPierwsze());
-    nowy_lwierzcholek->zmienMiejsce(miejsce_nowego);
-	
-    return nowy_lwierzcholek;
+    lwierzcholek<T, K> *nowy_wierzcholek= wierzcholki + l_wierzcholkow;
+
+    if(l_wierzcholkow >= rozmiar)
+	return nullptr;
+    
+    nowy_wierzcholek->zmienWartosc(wartosc);
+    l_wierzcholkow++;
+    
+    return nowy_wierzcholek;
 }
 
 template<typename T, typename K>
 lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1, lwierzcholek<T, K> *w2){
-    ogniwo< lkrawedz<T, K>* > *i1, *i2;
-    lkrawedz<T, K> *nowa_lkrawedz= new lkrawedz<T, K>(wartosc, w1, w2);
-    ogniwo< lkrawedz<T, K>* > *miejsce_nowej= lkrawedzie->dodajZa(nowa_lkrawedz, lkrawedzie->dajPierwsze());
-    nowa_lkrawedz->zmienMiejsce(miejsce_nowej);
+    lkrawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
 
-    i1= w1->dodajIncydencje(nowa_lkrawedz);
-    i2= w2->dodajIncydencje(nowa_lkrawedz);
-
-    nowa_lkrawedz->zmienIncydencje(i1, w1);
-    nowa_lkrawedz->zmienIncydencje(i2, w2);
+    if(l_krawedzi >= max_krawedzi)
+	return nullptr;
+    
+    nowa_krawedz->zmienWartosc(wartosc);
+    l_krawedzi++;
 	
-    return nowa_lkrawedz;
+    return nowa_krawedz;
 }
 
 template<typename T, typename K>
 void graf_lista<T, K>::usunWierzcholek(lwierzcholek<T, K> *w){
-    lista< lkrawedz<T, K>* > *inc= w->dajListeIncydencji();
-    while(inc->dajRozmiar() > 0)
-	usunKrawedz(inc->dajPierwsze()->dajWartosc());
-	
-    wierzcholki->usunOgniwo(w->dajMiejsce());
-    delete w;
+    cout << "todo\n";
 }
 
 template<typename T, typename K>
 void graf_lista<T, K>::usunKrawedz(lkrawedz<T, K> *k){
-    k->dajWierzcholki()->dajOgniwo(0)->dajWartosc()->usunIncydencje(k);
-    k->dajWierzcholki()->dajOgniwo(1)->dajWartosc()->usunIncydencje(k);
-    lkrawedzie->usunOgniwo(k->dajMiejsce());
-    delete k;
+    cout << "todo\n";
 }
 
 template<typename T, typename K>
 lwierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(lwierzcholek<T, K> *w, lkrawedz<T, K> *k){
-    if(k->dajWierzcholki()->dajOgniwo(0)->dajWartosc() == w)
-	return k->dajWierzcholki()->dajOgniwo(0)->dajWartosc();
-    else if(k->dajWierzcholki()->dajOgniwo(1)->dajWartosc() == w)
-	return k->dajWierzcholki()->dajOgniwo(1)->dajWartosc();
-    else
-	return nullptr;
+    cout << "todo\n";
 }
 
 template<typename T, typename K>

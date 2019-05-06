@@ -4,6 +4,7 @@
 #include "grafy_lista.hpp"
 #include "grafy_macierz.hpp"
 #include "kruskal.hpp"
+#include "prim.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -62,20 +63,32 @@ void rekonstruujGraf(T graf, T rek, K drzewo){
 	/* cout << w1->dajKlucz() << "---" << w2->dajKlucz() << '\n'; */
     }
 }
+/*
+shared_ptr<int> beka(void){
+    shared_ptr<int> tab= make_shared<int>();
+    
+    for(uint i= 0; i < 10; i++){
+	tab[i]= i;
+    }
 
+    return tab;
+}
+*/
 int main(void){
-    shared_ptr< graf_macierz<int, int> > test, rek;
-    shared_ptr< lista< mkrawedz<int, int> *> > drzewo;
+    /* shared_ptr< graf_macierz<int, int> > test, rek; */
+    /* shared_ptr< lista< mkrawedz<int, int> *> > drzewo; */
+    shared_ptr< graf_lista<int, int> > test, rek;
+    shared_ptr< lista< lkrawedz<int, int> *> > drzewo;
     uint rozmiar, gestosc;
     czas start, stop;
-    rozmiar= 1000;
+    rozmiar= 10;
     gestosc= 100;
     
     
-    test= make_shared< graf_macierz<int, int> >(rozmiar, gestosc);
-    rek= make_shared< graf_macierz<int, int> >(rozmiar, gestosc);
+    /* test= make_shared< graf_macierz<int, int> >(rozmiar, gestosc); */
+    /* rek= make_shared< graf_macierz<int, int> >(rozmiar, gestosc); */
     start= zegar::now();
-    test->losujMacierz();
+    /* test->losujMacierz(); */
     stop= zegar::now();
     
 
@@ -88,12 +101,14 @@ int main(void){
 
 
     start= zegar::now();
-    drzewo= mKruskal(test);
+    drzewo= mPrim(test, *test->dajKrawedz(0));
     stop= zegar::now();
 
     cout << "Wykonano alg. Kruskala w " << obliczCzas(start, stop, 'm') << " ms\n";
 
     cout << "Drzewo ma " << drzewo->dajRozmiar() << " krawedzi\n\n";
+
+    return 0;
     /*
     for(uint i= 0; i < drzewo->dajRozmiar(); i++){
 	k= drzewo->dajOgniwo(i)->dajWartosc();

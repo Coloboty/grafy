@@ -92,4 +92,41 @@ bool graf_lista<T, K>::czySasiedzi(uint w1, uint w2){
     return false;
 }
 
+template<typename T, typename K>
+void graf_lista<T, K>::losujGraf(uint gestosc){
+    uint dzielnik;
+
+    if(gestosc == 25 || gestosc == 75)
+	dzielnik= 4;
+    else if(gestosc == 50)
+	dzielnik= 2;
+    else if(gestosc == 100)
+	dzielnik= 1;
+    srand( time(NULL) );
+
+    /* Drzewo rozpinające */
+    for(uint i= 0; i < rozmiar-1; i++){
+	dodajKrawedz(rand()%100+1000, wierzcholki+i, wierzcholki+i+1);
+    }
+		
+    if(gestosc != 75){
+	for(uint i= 0; i < rozmiar-1; i++){
+	    for(uint j= i+2; j < rozmiar; j++){
+		if((i+j)%dzielnik == 0){		    
+		    dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
+		}
+	    }
+	}
+    }
+    else{
+	for(uint i= 0; i < rozmiar-1; i++){
+	    for(uint j= i+2; j < rozmiar; j++){
+		if((i+j)%dzielnik != 0){		    
+		    dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
+		}
+	    }
+	}
+    }
+}
+
 #endif

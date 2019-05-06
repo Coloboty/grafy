@@ -10,8 +10,9 @@
 using namespace std;
 
 int main(void){
-    shared_ptr< graf_macierz<int, int> > test, rek;
-    /* shared_ptr< lista< krawedz<int, int> *> > mst; */
+    /* shared_ptr< graf_macierz<int, int> > test, rek; */
+    shared_ptr< graf_lista<int, int> > ltest;
+    shared_ptr< graf_macierz<int, int> > mtest, rek;
     shared_ptr<drzewo<int, int>> mst;
 
     uint rozmiar, gestosc;
@@ -20,45 +21,44 @@ int main(void){
     gestosc= 100;
     
     
-    test= make_shared< graf_macierz<int, int> >(rozmiar);
+    /* test= make_shared< graf_macierz<int, int> >(rozmiar); */
+    /* rek= make_shared< graf_macierz<int, int> >(rozmiar); */
+    ltest= make_shared< graf_lista<int, int> >(rozmiar);
+    mtest= make_shared< graf_macierz<int, int> >(rozmiar);
     rek= make_shared< graf_macierz<int, int> >(rozmiar);
+    
+    
     start= zegar::now();
-    test->losujMacierz(gestosc);
-
+    ltest->losujGraf(gestosc);
     stop= zegar::now();
     
-
-    cout << "Stworzono losowy graf w " << obliczCzas(start, stop, 'u') << " us\n";
-    
-    cout << "graf ma " << rozmiar << " wierzcholkow i " <<
-	test->dajLiczbeKrawedzi() << " krawedzi. ";
-
-    cout << "gestosc to " << test->dajLiczbeKrawedzi()*100/((rozmiar*(rozmiar-1))/2) << '\n';
-
+    cout << "Stworzono losowy graf_lista w " << obliczCzas(start, stop, 'm') << " ms\n";
 
     start= zegar::now();
-    mst= mKruskal(test);
+    mtest->losujGraf(gestosc);
+    stop= zegar::now();
+    
+    cout << "Stworzono losowy graf_macierz w " << obliczCzas(start, stop, 'm') << " ms\n";
+    
+    cout << "graf ma " << rozmiar << " wierzcholkow i " <<
+	mtest->dajLiczbeKrawedzi() << " krawedzi. ";
 
+    cout << "gestosc to " << mtest->dajLiczbeKrawedzi()*100/((rozmiar*(rozmiar-1))/2) << '\n';
+
+    
+    start= zegar::now();
+    mst= mKruskal(mtest);
     stop= zegar::now();
 
     cout << "Wykonano alg. Kruskala w " << obliczCzas(start, stop, 'm') << " ms\n";
     
     cout << "mst ma " << mst->dajRozmiar() << " krawedzi\n\n";
-
-    /*
-    for(uint i= 0; i < mst->dajRozmiar(); i++){
-	k= mst->dajOgniwo(i)->dajWartosc();
-	
-	w1= k->dajWierzcholek1();
-	w2= k->dajWierzcholek2();
-	rek->dodajKrawedz(2137, w1, w2);
-    }
-    */
-    rekonstruujGraf(rek, test, mst);
     cout << '\n';
-
+    
+    rekonstruujGraf(rek, mtest, mst);
+    
     cout << testujSpojnoscGrafu(rek) << '\n';
-
     cout << "Koniec programu!\n";
+    
     return 0;
 }

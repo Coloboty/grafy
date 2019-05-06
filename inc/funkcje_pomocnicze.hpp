@@ -34,7 +34,7 @@ bool testujSpojnoscGrafu(T graf){
     uint rozmiar= graf->dajRozmiar();
     
     for(uint i= 0; i < rozmiar; i++){
-	if(graf->dajLiczbeIncydencji(graf->dajWierzcholek(i)) == 0)
+	if(graf->dajLiczbeKrawedzi(i) == 0)
 	    return false;
     }
 

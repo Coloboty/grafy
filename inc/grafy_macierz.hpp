@@ -51,39 +51,6 @@ wierzcholek<T, K> *graf_macierz<T, K>::dajPrzeciwleglyWierzcholek(wierzcholek<T,
 }
 
 template<typename T, typename K>
-uint graf_macierz<T, K>::dajLiczbeIncydencji(wierzcholek<T, K> *w){
-    uint klucz, licznik;
-    krawedz<T, K> *k;
-	
-    licznik=  0;
-    klucz= w->dajKlucz();
-	
-    for(uint i= 0; i < rozmiar; i++){
-	k= zMacierzy(klucz, i);
-	if(k != nullptr)
-	    licznik++;
-    }
-
-    return licznik;
-}
-
-template<typename T, typename K>
-uint graf_macierz<T, K>::dajLiczbeIncydencji(uint klucz){
-    uint licznik;
-    krawedz<T, K> *k;
-	
-    licznik=  0;
-    	
-    for(uint i= 0; i < rozmiar; i++){
-	k= zMacierzy(klucz, i);
-	if(k != nullptr)
-	    licznik++;
-    }
-
-    return licznik;
-}
-
-template<typename T, typename K>
 bool graf_macierz<T, K>::czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2){
     uint klucz1, klucz2;
     krawedz<T, K> *k;
@@ -128,7 +95,7 @@ void graf_macierz<T, K>::drukujMacierz(void){
 }
 
 template<typename T, typename K>
-void graf_macierz<T, K>::losujMacierz(uint gestosc){
+void graf_macierz<T, K>::losujGraf(uint gestosc){
     uint dzielnik;
 
     if(gestosc == 25 || gestosc == 75)
@@ -162,6 +129,39 @@ void graf_macierz<T, K>::losujMacierz(uint gestosc){
 	    }
 	}
     }
+}
+
+template<typename T, typename K>
+uint graf_macierz<T, K>::dajLiczbeKrawedzi(wierzcholek<T, K> *w){
+    uint klucz, licznik;
+    krawedz<T, K> *k;
+	
+    licznik=  0;
+    klucz= w->dajKlucz();
+	
+    for(uint i= 0; i < rozmiar; i++){
+	k= zMacierzy(klucz, i);
+	if(k != nullptr)
+	    licznik++;
+    }
+
+    return licznik;
+}
+
+template<typename T, typename K>
+uint graf_macierz<T, K>::dajLiczbeKrawedzi(uint klucz){
+    uint licznik;
+    krawedz<T, K> *k;
+	
+    licznik=  0;
+    	
+    for(uint i= 0; i < rozmiar; i++){
+	k= zMacierzy(klucz, i);
+	if(k != nullptr)
+	    licznik++;
+    }
+
+    return licznik;
 }
 
 template<typename T, typename K>

@@ -7,7 +7,7 @@ LISTA= inc/lista.h inc/lista.hpp
 GMACIERZ= inc/grafy_macierz.h inc/grafy_macierz.hpp
 GLISTA= inc/grafy_lista.h inc/grafy_lista.hpp
 KRUSKAL= inc/kruskal.h inc/kruskal.hpp
-INNE= inc/porownywacz.h inc/grafy_klasy.h
+INNE= inc/porownywacz.h inc/grafy_klasy.h inc/funkcje_pomocnicze.hpp
 # __start__: uklad_rownan
 	# ./uklad_rownan
 

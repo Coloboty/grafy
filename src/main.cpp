@@ -21,8 +21,10 @@ int main(void){
     w3= test->dodajWierzcholek(911);
     k1= test->dodajKrawedz(2137, w1, w2);
     k2= test->dodajKrawedz(2138, w2, w3);
-
     
+    cout << test->dajWierzcholek(0)->dajWartosc() << '\n';
+    cout << test->dajWierzcholek(1)->dajWartosc() << '\n';
+    cout << test->dajWierzcholek(2)->dajWartosc() << '\n';
     
     cout << "Koniec programu!\n";
     return 0;

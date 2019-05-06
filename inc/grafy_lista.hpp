@@ -24,6 +24,8 @@ lkrawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, lwierzcholek<T, K> *w1
 	return nullptr;
     
     nowa_krawedz->zmienWartosc(wartosc);
+    incydencje[w1->dajKlucz()].dodajOgniwo(nowa_krawedz);
+    incydencje[w2->dajKlucz()].dodajOgniwo(nowa_krawedz);
     l_krawedzi++;
 	
     return nowa_krawedz;

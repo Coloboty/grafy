@@ -46,6 +46,13 @@ public:
 	if(licznik) return glowa->dajNastepnik();
 	else return glowa;
     }
+
+    ogniwo<T> *dodajOgniwo(T wartosc){
+	if(licznik == 0)
+	    return dodajZa(wartosc, dajPierwsze());
+	else
+	    return dodajPrzed(wartosc, dajPierwsze());
+    }
     
     ogniwo<T> *operator[](uint ind);
     ogniwo<T> *dajOgniwo(uint ind);

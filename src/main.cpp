@@ -46,18 +46,19 @@ bool testujSpojnoscGrafu(T graf){
 }
 
 template<typename T, typename K>
-void rekonstruujGraf(T rek, T graf, K drzewo){
-    for(uint i= 0; i < drzewo->dajRozmiar(); i++){
-	rek->dodajKrawedz(drzewo->dajOgniwo(i)->dajWartosc()->dajWartosc(),
-			  drzewo->dajOgniwo(i)->dajWartosc()->dajW1(),
-			  drzewo->dajOgniwo(i)->dajWartosc()->dajW2());
+void rekonstruujGraf(T rek, T graf, K mst){
+    for(uint i= 0; i < mst->dajRozmiar(); i++){
+	rek->dodajKrawedz(mst->dajOgniwo(i)->dajWartosc()->dajWartosc(),
+			  mst->dajOgniwo(i)->dajWartosc()->dajW1(),
+			  mst->dajOgniwo(i)->dajWartosc()->dajW2());
 	/* cout << w1->dajKlucz() << "---" << w2->dajKlucz() << '\n'; */
     }
 }
 
 int main(void){
     shared_ptr< graf_macierz<int, int> > test, rek;
-    shared_ptr< lista< krawedz<int, int> *> > drzewo;
+    /* shared_ptr< lista< krawedz<int, int> *> > mst; */
+    shared_ptr<drzewo<int, int>> mst;
     uint rozmiar, gestosc;
     czas start, stop;
     rozmiar= 1000;
@@ -80,22 +81,22 @@ int main(void){
 
 
     start= zegar::now();
-    drzewo= mKruskal(test);
+    mst= mKruskal(test);
     stop= zegar::now();
 
     cout << "Wykonano alg. Kruskala w " << obliczCzas(start, stop, 'm') << " ms\n";
 
-    cout << "Drzewo ma " << drzewo->dajRozmiar() << " krawedzi\n\n";
+    cout << "mst ma " << mst->dajRozmiar() << " krawedzi\n\n";
     /*
-    for(uint i= 0; i < drzewo->dajRozmiar(); i++){
-	k= drzewo->dajOgniwo(i)->dajWartosc();
+    for(uint i= 0; i < mst->dajRozmiar(); i++){
+	k= mst->dajOgniwo(i)->dajWartosc();
 	
 	w1= k->dajWierzcholek1();
 	w2= k->dajWierzcholek2();
 	rek->dodajKrawedz(2137, w1, w2);
     }
     */
-    rekonstruujGraf(rek, test, drzewo);
+    rekonstruujGraf(rek, test, mst);
     cout << '\n';
 
     cout << testujSpojnoscGrafu(rek) << '\n';

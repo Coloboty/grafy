@@ -54,18 +54,30 @@ krawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
 
 template<typename T, typename K>
 wierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k){
-    if(k->dajW1() == w)
-	return k->dajW2();
+    wierzcholek<T, K> *w1, *w2;
+    w1= k->dajW1();
+    w2= k->dajW2();
+
+    if(w == w1)
+	return w2;
+    else if(w == w2)
+	return w1;
     else
-	return w;
+	return nullptr;
 }
 
 template<typename T, typename K>
 wierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(uint w, krawedz<T, K> *k){
-    if(k->dajW1() == w)
-	return k->dajW2();
+    wierzcholek<T, K> *w1, *w2;
+    w1= k->dajW1();
+    w2= k->dajW2();
+
+    if(wierzcholki+w == w1)
+	return w2;
+    else if(wierzcholki+w == w2)
+	return w1;
     else
-	return w;
+	return nullptr;
 }
 
 template<typename T, typename K>
@@ -119,13 +131,13 @@ void graf_lista<T, K>::losujGraf(uint gestosc){
 
     /* Drzewo rozpinające */
     for(uint i= 0; i < rozmiar-1; i++){
-	dodajKrawedz(rand()%100+1000, wierzcholki+i, wierzcholki+i+1);
+	dodajKrawedz(rand()%200+1000, wierzcholki+i, wierzcholki+i+1);
     }
 		
     if(gestosc != 75){
 	for(uint i= 0; i < rozmiar-1; i++){
 	    for(uint j= i+2; j < rozmiar; j++){
-		if((i+j)%dzielnik == 0){		    
+		if((i+j)%dzielnik == 0){
 		    dodajKrawedz(rand()%100+1000, wierzcholki+j, wierzcholki+i);
 		}
 	    }

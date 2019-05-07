@@ -59,7 +59,7 @@ void prim(G graf, shared_ptr< drzewo<T, K> > mst){
 	incydencje= graf->dajKrawedzie(w1);
 	l_krawedzi= incydencje->dajRozmiar();
 
-	cout << "wzięto " << w1->dajKlucz() << '\n';
+	/* cout << "wzięto " << w1->dajKlucz() << '\n'; */
 
 	/* Dla każdej krawędzi do niego przylegającej: */
 	for(uint i= 0; i < l_krawedzi; i++){
@@ -67,13 +67,14 @@ void prim(G graf, shared_ptr< drzewo<T, K> > mst){
 
 	    /* Znajdź wierzchołek po drugiej stronie */
 	    w2= graf->dajPrzeciwleglyWierzcholek(w1, k);
+	    /* cout << "+" << w2->dajKlucz() << '\n'; */
 	    
 	    /* Zaktualizuj koszt dotarcia do niego, jeśli jest mniejszy niż z innego wierzchołka */
 	    /* i zapisz odpowiadającą tej ścieżce krawędź */
 	    if(w2->dajWartosc() > k->dajWartosc()){
 		w2->zmienWartosc(k->dajWartosc());
 		krawedzie[w2->dajKlucz()]= k;
-		cout << "zaktualizowano " << w2->dajKlucz() << " do " << w2->dajWartosc() << '\n';
+		/* cout << "zaktualizowano " << w2->dajKlucz() << " do " << w2->dajWartosc() << '\n'; */
 	    }
 	}
 

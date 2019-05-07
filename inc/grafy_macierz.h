@@ -65,6 +65,7 @@ public:
     /* --- */
 
     wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k);
+    wierzcholek<T, K> *dajPrzeciwleglyWierzcholek(uint w, krawedz<T, K> *k);
 
     bool czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
     bool czySasiedzi(uint k1, uint k2);

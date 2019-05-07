@@ -70,6 +70,20 @@ wierzcholek<T, K> *graf_macierz<T, K>::dajPrzeciwleglyWierzcholek(wierzcholek<T,
 }
 
 template<typename T, typename K>
+wierzcholek<T, K> *graf_macierz<T, K>::dajPrzeciwleglyWierzcholek(uint w, krawedz<T, K> *k){
+    wierzcholek<T, K> *w1, *w2;
+    w1= k->dajW1();
+    w2= k->dajW2();
+
+    if(wierzcholki+w == w1)
+	return w2;
+    else if(wierzcholki+w == w2)
+	return w1;
+    else
+	return nullptr;
+}
+
+template<typename T, typename K>
 bool graf_macierz<T, K>::czySasiedzi(wierzcholek<T, K> *w1, wierzcholek<T, K> *w2){
     uint klucz1, klucz2;
     krawedz<T, K> *k;

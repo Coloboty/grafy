@@ -24,6 +24,23 @@ void testowyGraf(G graf){
     graf->dodajKrawedz(10, 0, 6);
 }
 
+template<typename T, typename K, typename G>
+void wypisz(G graf, shared_ptr< drzewo<T, K> > d ){
+    shared_ptr< lista< krawedz<T, K>* > > in;
+    uint r, rr;
+
+    rr= graf->dajRozmiar();
+    for(uint i= 0; i < rr; i++){
+	in= graf->dajKrawedzie(i);
+	r= in->dajRozmiar();
+	cout << "\nkrawędzie przyległe do w" << i << '\n';
+	for(uint j= 0; j < r; j++){
+	    cout << in->dajOgniwo(j)->dajWartosc()->dajW1()->dajKlucz() << " --- " << in->dajOgniwo(j)->dajWartosc()->dajW2()->dajKlucz() << '\n';
+	}
+	cout << '\n';
+    }
+}
+
 int main(void){
     shared_ptr< graf_lista<int, int> > ltest, lrek;
     shared_ptr< graf_macierz<int, int> > mtest, mrek;
@@ -85,6 +102,9 @@ int main(void){
     cout << '\n';
     rekonstruujGraf(lrek, ltest, mst);
     cout << "Graf spójny?: " << testujSpojnoscGrafu(lrek) << '\n';
+
+    /* cout << ltest->dajLiczbeKrawedzi(1) << '\n'; */
+    /* wypisz(ltest, mst); */
     
     cout << "Koniec programu!\n";
     

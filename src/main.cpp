@@ -49,7 +49,7 @@ int main(void){
     uint rozmiar, gestosc;
     /* uint rozmiar; */
     czas start, stop;
-    rozmiar= 10;
+    rozmiar= 1000;
     gestosc= 100;
     
     
@@ -63,8 +63,8 @@ int main(void){
     mst= make_shared< drzewo<int, int> >();
     
     start= zegar::now();
-    ltest->losujGraf(gestosc);
-    /* mtest->losujGraf(gestosc); */
+    /* ltest->losujGraf(gestosc); */
+    mtest->losujGraf(gestosc);
     stop= zegar::now();
 
     /* testowyGraf(ltest); */
@@ -87,8 +87,10 @@ int main(void){
     
     
     start= zegar::now();
-    prim(ltest, mst);
-    /* prim(mtest, mst); */
+    /* kruskal(ltest, mst); */
+    /* kruskal(mtest, mst); */
+    /* prim(ltest, mst); */
+    prim(mtest, mst);
     stop= zegar::now();
     
     cout << "Wykonano alg. Prima w " << obliczCzas(start, stop, 'm') << " ms\n";
@@ -96,8 +98,8 @@ int main(void){
     cout << "mst ma " << mst->dajRozmiar() << " krawedzi\n\n";
     
 
-    for(uint i= 0; i < mst->dajRozmiar(); i++)
-	cout << mst->dajOgniwo(i)->dajWartosc()->dajW1()->dajKlucz() << " --- " << mst->dajOgniwo(i)->dajWartosc()->dajW2()->dajKlucz() << '\n';
+    /* for(uint i= 0; i < mst->dajRozmiar(); i++) */
+	/* cout << mst->dajOgniwo(i)->dajWartosc()->dajW1()->dajKlucz() << " --- " << mst->dajOgniwo(i)->dajWartosc()->dajW2()->dajKlucz() << '\n'; */
 
     cout << '\n';
     rekonstruujGraf(lrek, ltest, mst);

@@ -24,8 +24,11 @@ krawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, 
 	return nullptr;
     
     nowa_krawedz->zmienWartosc(wartosc);
-    incydencje[w1->dajKlucz()].dodajOgniwo(nowa_krawedz);
-    incydencje[w2->dajKlucz()].dodajOgniwo(nowa_krawedz);
+    nowa_krawedz->zmienW1(w1);
+    nowa_krawedz->zmienW2(w2);
+    
+    incydencje[w1->dajKlucz()]->dodajOgniwo(nowa_krawedz);
+    incydencje[w2->dajKlucz()]->dodajOgniwo(nowa_krawedz);
     l_krawedzi++;
 	
     return nowa_krawedz;
@@ -39,8 +42,11 @@ krawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
 	return nullptr;
     
     nowa_krawedz->zmienWartosc(wartosc);
-    incydencje[k1].dodajOgniwo(nowa_krawedz);
-    incydencje[k2].dodajOgniwo(nowa_krawedz);
+    nowa_krawedz->zmienW1(wierzcholki+k1);
+    nowa_krawedz->zmienW2(wierzcholki+k2);
+    
+    incydencje[k1]->dodajOgniwo(nowa_krawedz);
+    incydencje[k2]->dodajOgniwo(nowa_krawedz);
     l_krawedzi++;
 	
     return nowa_krawedz;
@@ -48,12 +54,18 @@ krawedz<T, K> *graf_lista<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
 
 template<typename T, typename K>
 wierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k){
-    cout << "todo\n";
+    if(k->dajW1() == w)
+	return k->dajW2();
+    else
+	return w;
 }
 
 template<typename T, typename K>
 wierzcholek<T, K> *graf_lista<T, K>::dajPrzeciwleglyWierzcholek(uint w, krawedz<T, K> *k){
-    cout << "todo\n";
+    if(k->dajW1() == w)
+	return k->dajW2();
+    else
+	return w;
 }
 
 template<typename T, typename K>
@@ -102,6 +114,7 @@ void graf_lista<T, K>::losujGraf(uint gestosc){
 	dzielnik= 2;
     else if(gestosc == 100)
 	dzielnik= 1;
+    
     srand( time(NULL) );
 
     /* Drzewo rozpinające */

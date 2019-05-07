@@ -58,6 +58,7 @@ public:
 
     wierzcholek<T, K> *dodajWierzcholek(T wartosc);
     krawedz<T, K> *dodajKrawedz(K wartosc, wierzcholek<T, K> *w1, wierzcholek<T, K> *w2);
+    krawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
 
     void losujGraf(uint gestosc);
     

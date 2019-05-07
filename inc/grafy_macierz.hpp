@@ -37,6 +37,25 @@ krawedz<T, K> *graf_macierz<T, K>::dodajKrawedz(K wartosc, wierzcholek<T, K> *w1
 }
 
 template<typename T, typename K>
+krawedz<T, K> *graf_macierz<T, K>::dodajKrawedz(K wartosc, uint k1, uint k2){
+    krawedz<T, K> *nowa_krawedz= krawedzie + l_krawedzi;
+    	
+    if(l_krawedzi >= max_krawedzi)
+	return nullptr;
+        
+    nowa_krawedz->zmienWartosc(wartosc);
+    nowa_krawedz->zmienW1(wierzcholki+k1);
+    nowa_krawedz->zmienW2(wierzcholki+k2);
+	
+    doMacierzy(k1, k2, nowa_krawedz);
+    doMacierzy(k2, k1, nowa_krawedz);
+	
+    l_krawedzi++;
+
+    return nowa_krawedz;
+}
+
+template<typename T, typename K>
 wierzcholek<T, K> *graf_macierz<T, K>::dajPrzeciwleglyWierzcholek(wierzcholek<T, K> *w, krawedz<T, K> *k){
     wierzcholek<T, K> *w1, *w2;
     w1= k->dajW1();
@@ -104,6 +123,7 @@ void graf_macierz<T, K>::losujGraf(uint gestosc){
 	dzielnik= 2;
     else if(gestosc == 100)
 	dzielnik= 1;
+    
     srand( time(NULL) );
 
     /* Drzewo rozpinające */

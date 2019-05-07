@@ -41,72 +41,180 @@ void wypisz(G graf, shared_ptr< drzewo<T, K> > d ){
     }
 }
 
-int main(void){
-    shared_ptr< graf_lista<int, int> > ltest, lrek;
-    shared_ptr< graf_macierz<int, int> > mtest, mrek;
+void testujRecznie(void){
+    shared_ptr< graf_lista<int, int> > lgraf, lrek;
+    shared_ptr< graf_macierz<int, int> > mgraf, mrek;
     shared_ptr<drzewo<int, int>> mst;
-
+    uint wybor;
     uint rozmiar, gestosc;
-    /* uint rozmiar; */
     czas start, stop;
-    rozmiar= 1000;
-    gestosc= 100;
-    
-    
-    /* test= make_shared< graf_macierz<int, int> >(rozmiar); */
-    /* rek= make_shared< graf_macierz<int, int> >(rozmiar); */
-    ltest= make_shared< graf_lista<int, int> >(rozmiar);
-    mtest= make_shared< graf_macierz<int, int> >(rozmiar);
-    lrek= make_shared< graf_lista<int, int> >(rozmiar);
-    mrek= make_shared< graf_macierz<int, int> >(rozmiar);
 
     mst= make_shared< drzewo<int, int> >();
-    
-    start= zegar::now();
-    /* ltest->losujGraf(gestosc); */
-    mtest->losujGraf(gestosc);
-    stop= zegar::now();
-
-    /* testowyGraf(ltest); */
-    /* testowyGraf(mtest); */
-    
-    /* cout << "Stworzono losowy graf_lista w " << obliczCzas(start, stop, 'm') << " ms\n"; */
-
-    /*
-    start= zegar::now();
-    mtest->losujGraf(gestosc);
-    stop= zegar::now();
-    
-    cout << "Stworzono losowy graf_macierz w " << obliczCzas(start, stop, 'm') << " ms\n";
-    */
-
-    cout << "graf ma " << rozmiar << " wierzcholkow i " <<
-	ltest->dajLiczbeKrawedzi() << " krawedzi. ";
-
-    cout << "gestosc to " << ltest->dajLiczbeKrawedzi()*100/((rozmiar*(rozmiar-1))/2) << '\n';
-    
-    
-    start= zegar::now();
-    /* kruskal(ltest, mst); */
-    /* kruskal(mtest, mst); */
-    /* prim(ltest, mst); */
-    prim(mtest, mst);
-    stop= zegar::now();
-    
-    cout << "Wykonano alg. Prima w " << obliczCzas(start, stop, 'm') << " ms\n";
-    
-    cout << "mst ma " << mst->dajRozmiar() << " krawedzi\n\n";
-    
-
-    /* for(uint i= 0; i < mst->dajRozmiar(); i++) */
-	/* cout << mst->dajOgniwo(i)->dajWartosc()->dajW1()->dajKlucz() << " --- " << mst->dajOgniwo(i)->dajWartosc()->dajW2()->dajKlucz() << '\n'; */
 
     cout << '\n';
-    rekonstruujGraf(lrek, ltest, mst);
-    cout << "Graf spójny?: " << testujSpojnoscGrafu(lrek) << '\n';
+    cout << "Wybierz wielkość grafu:" << '\n';
+    cout << "1: 50" << '\n';
+    cout << "2: 100" << '\n';
+    cout << "3: 250" << '\n';
+    cout << "4: 500" << '\n';
+    cout << "5: 1000" << '\n';
+    cout << "Wybór: ";
+    cin >> wybor;
 
-    /* cout << ltest->dajLiczbeKrawedzi(1) << '\n'; */
-    /* wypisz(ltest, mst); */
+    switch(wybor){
+    case 1:
+	rozmiar= 50;
+	break;
+    case 2:
+	rozmiar= 100;
+	break;
+    case 3:
+	rozmiar= 250;
+	break;
+    case 4:
+	rozmiar= 500;
+	break;
+    case 5:
+	rozmiar= 1000;
+	break;
+
+    default:
+	cout << "Nie rozumiem!" << '\n';
+	return;
+	break;
+    }
+    
+    cout << '\n';
+    cout << "Wybierz gęstość grafu:" << '\n';
+    cout << "1: 25%" << '\n';
+    cout << "2: 50%" << '\n';
+    cout << "3: 75%" << '\n';
+    cout << "4: 100%" << '\n';
+    cout << "Wybór: ";
+    cin >> wybor;
+
+    switch(wybor){
+    case 1:
+	gestosc= 25;
+	break;
+    case 2:
+	gestosc= 50;
+	break;
+    case 3:
+	gestosc= 75;
+	break;
+    case 4:
+	gestosc= 100;
+	break;
+
+    default:
+	cout << "Nie rozumiem!" << '\n';
+	return;
+	break;
+    }
+    
+    cout << '\n';
+    cout << "Wybierz rodzaj reprezentacji grafu:" << '\n';
+    cout << "1: Macierz sąsiedztwa" << '\n';
+    cout << "2: Lista sąsiedztwa" << '\n';
+    cout << "Wybór: ";
+    cin >> wybor;
+    
+    switch(wybor){
+    case 1:
+	mgraf= make_shared< graf_macierz<int, int> >(rozmiar);
+	mrek= make_shared< graf_macierz<int, int> >(rozmiar);
+	mgraf->losujGraf(gestosc);
+	break;
+    case 2:
+	lgraf= make_shared< graf_lista<int, int> >(rozmiar);
+	lrek= make_shared< graf_lista<int, int> >(rozmiar);
+	lgraf->losujGraf(gestosc);
+	break;
+
+    default:
+	cout << "Nie rozumiem!" << '\n';
+	return;
+	break;
+    }
+
+    cout << '\n';
+    cout << "Wybierz algorytm wyznaczania drzewa:" << '\n';
+    cout << "1: Algorytm Kruskala" << '\n';
+    cout << "2: Algorytm Prima" << '\n';
+    cout << "Wybór: ";
+    cin >> wybor;
+    
+    switch(wybor){
+    case 1:
+	if(mgraf == nullptr){
+	    start= zegar::now();
+	    kruskal(lgraf, mst);
+	    stop= zegar::now();
+	    rekonstruujGraf(lrek, lgraf, mst);
+	}
+	else{
+	    start= zegar::now();
+	    kruskal(mgraf, mst);
+	    stop= zegar::now();
+	    rekonstruujGraf(mrek, mgraf, mst);
+	}
+
+	cout << "Wykonano alg. Kruskala w " << obliczCzas(start, stop, 'm') << " ms\n";
+	break;
+    case 2:
+	if(mgraf == nullptr){
+	    start= zegar::now();
+	    prim(lgraf, mst);
+	    stop= zegar::now();
+	    rekonstruujGraf(lrek, lgraf, mst);
+	}
+	else{
+	    start= zegar::now();
+	    prim(mgraf, mst);
+	    stop= zegar::now();
+	    rekonstruujGraf(mrek, mgraf, mst);
+	}
+
+	cout << "Wykonano alg. Prima w " << obliczCzas(start, stop, 'm') << " ms\n";
+	break;
+
+    default:
+	cout << "Nie rozumiem!" << '\n';
+	return;
+	break;
+    }
+    
+    cout << "dla grafu o wielkości " << rozmiar << " i " << ((rozmiar*(rozmiar-1))/2)*100/gestosc << " krawedziach\n";
+}
+
+int main(void){
+    czas start, stop;
+    uint wybor;
+
+    cout << "Wybierz opcje:" << '\n';
+    cout << "1: Testowanie ręczne" << '\n';
+    cout << "2: Testowanie automatyczne" << '\n';
+    cout << "Wybór: ";
+    cin >> wybor;
+
+    switch(wybor){
+    case 1:
+	cout << "Wybrano test. ręczne" << '\n';
+	cout << '\n';
+	testujRecznie();
+	break;
+    case 2:
+	cout << "Wybrano test. automatyczne" << '\n';
+	cout << '\n';
+	break;
+
+    default:
+	cout << "Nie rozumiem!" << '\n';
+	return 0;
+	break;
+    }
+    
     
     cout << "Koniec programu!\n";
     

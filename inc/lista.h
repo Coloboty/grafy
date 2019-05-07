@@ -57,6 +57,11 @@ public:
     ogniwo<T> *operator[](uint ind);
     ogniwo<T> *dajOgniwo(uint ind);
 
+    void czyscListe(void){
+	while(licznik)
+	    usunOgniwo(dajOstatnie());
+    }
+    
     void usunOgniwo(ogniwo<T> *ogn);
     ogniwo<T> *dodajZa(T wartosc, ogniwo<T> *ogn);
     ogniwo<T> *dodajPrzed(T wartosc, ogniwo<T> *ogn);

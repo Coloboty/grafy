@@ -42,10 +42,11 @@ public:
 	macierz= new krawedz<T, K>*[rozmiar*rozmiar];
 
 	/* Porządek w macierzy i klucze po kolei */
-	for(uint i= 0; i < rozmiar; i++){
-	    macierz[i]= nullptr;
+	for(uint i= 0; i < rozmiar; i++)
 	    wierzcholki[i].zmienKlucz(i);
-	}
+	
+	for(uint i= 0; i < rozmiar*rozmiar; i++)
+	    macierz[i]= nullptr;
     }
 
     ~graf_macierz(){
@@ -61,6 +62,7 @@ public:
     krawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
 
     void losujGraf(uint gestosc);
+    void czyscGraf(void);
     
     /* --- */
 

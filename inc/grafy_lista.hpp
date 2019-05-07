@@ -154,4 +154,13 @@ void graf_lista<T, K>::losujGraf(uint gestosc){
     }
 }
 
+template<typename T, typename K>
+void graf_lista<T, K>::czyscGraf(void){
+    l_krawedzi= 0;
+    for(uint i= 0; i < rozmiar; i++){
+	wierzcholki[i].zmienWartosc(0);
+	incydencje[i]->czyscListe();
+    }
+}
+    
 #endif

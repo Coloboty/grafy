@@ -166,6 +166,17 @@ void graf_macierz<T, K>::losujGraf(uint gestosc){
 }
 
 template<typename T, typename K>
+void graf_macierz<T, K>::czyscGraf(void){
+    l_krawedzi= 0;
+    
+    for(uint i= 0; i < rozmiar; i++)
+	wierzcholki[i].zmienWartosc(0);
+
+    for(uint i= 0; i < rozmiar*rozmiar; i++)
+	macierz[i]= nullptr;
+}
+
+template<typename T, typename K>
 uint graf_macierz<T, K>::dajLiczbeKrawedzi(wierzcholek<T, K> *w){
     uint klucz, licznik;
     krawedz<T, K> *k;

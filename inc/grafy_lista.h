@@ -48,6 +48,7 @@ public:
     krawedz<T, K> *dodajKrawedz(K wartosc, uint k1, uint k2);
 
     void losujGraf(uint gestosc);
+    void czyscGraf(void);
     
     /* --------------------- */
 

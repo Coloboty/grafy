@@ -54,6 +54,7 @@ void prim(G graf, shared_ptr< drzewo<T, K> > mst){
 
 	/* Dodaj odpowiadającą mu krawędź do drzewa */
 	mst->dodajOgniwo(krawedzie[w1->dajKlucz()]);
+	/* w1->zmienWartosc(1); */
 
 	/* Weź listę wszystkich jego krawędzi */
 	incydencje= graf->dajKrawedzie(w1);

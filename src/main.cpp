@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <fstream>
 #include "lista.hpp"
 #include "grafy_lista.hpp"
 #include "grafy_macierz.hpp"
@@ -8,38 +9,6 @@
 #include "prim.hpp"
 
 using namespace std;
-
-template<typename G>
-void testowyGraf(G graf){
-    graf->dodajKrawedz(3, 0, 1);
-    graf->dodajKrawedz(4, 0, 5);
-    graf->dodajKrawedz(7, 1, 6);
-    graf->dodajKrawedz(2, 1, 2);
-    graf->dodajKrawedz(3, 2, 3);
-    graf->dodajKrawedz(8, 2, 6);
-    graf->dodajKrawedz(5, 3, 6);
-    graf->dodajKrawedz(12, 6, 5);
-    graf->dodajKrawedz(11, 6, 4);
-
-    graf->dodajKrawedz(10, 0, 6);
-}
-
-template<typename T, typename K, typename G>
-void wypisz(G graf, shared_ptr< drzewo<T, K> > d ){
-    shared_ptr< lista< krawedz<T, K>* > > in;
-    uint r, rr;
-
-    rr= graf->dajRozmiar();
-    for(uint i= 0; i < rr; i++){
-	in= graf->dajKrawedzie(i);
-	r= in->dajRozmiar();
-	cout << "\nkrawędzie przyległe do w" << i << '\n';
-	for(uint j= 0; j < r; j++){
-	    cout << in->dajOgniwo(j)->dajWartosc()->dajW1()->dajKlucz() << " --- " << in->dajOgniwo(j)->dajWartosc()->dajW2()->dajKlucz() << '\n';
-	}
-	cout << '\n';
-    }
-}
 
 void testujRecznie(void){
     shared_ptr< graf_lista<int, int> > lgraf, lrek;
@@ -188,6 +157,172 @@ void testujRecznie(void){
     cout << "dla grafu o wielkości " << rozmiar << " i " << ((rozmiar*(rozmiar-1))/2)*100/gestosc << " krawedziach\n";
 }
 
+template<typename G>
+uint testK(G graf, uint gestosc){
+    shared_ptr<drzewo<int, int>> mst;
+    czas start, stop;
+    uint czas_sredni= 0;
+    const uint powtorzenia= 20;
+
+    mst= make_shared< drzewo<int, int> >();
+    for(uint i= 0; i < powtorzenia; i++){
+	graf->losujGraf(gestosc);
+	
+	start= zegar::now();
+	kruskal(graf, mst);
+	stop= zegar::now();
+	czas_sredni+= obliczCzas(start, stop, 'm');
+
+	graf->czyscGraf();
+	mst->czyscListe();
+    }
+
+    return czas_sredni/powtorzenia;
+}
+
+template<typename G>
+uint testP(G graf, uint gestosc){
+    shared_ptr<drzewo<int, int>> mst;
+    czas start, stop;
+    uint czas_sredni= 0;
+    const uint powtorzenia= 20;
+
+    mst= make_shared< drzewo<int, int> >();
+    for(uint i= 0; i < powtorzenia; i++){
+	graf->losujGraf(gestosc);
+	
+	start= zegar::now();
+	prim(graf, mst);
+	stop= zegar::now();
+	czas_sredni+= obliczCzas(start, stop, 'm');
+
+	graf->czyscGraf();
+	mst->czyscListe();
+    }
+
+    return czas_sredni/powtorzenia;
+}
+
+void testujAutomatycznie(void){
+    shared_ptr< graf_lista<int, int> > lgraf, lrek;
+    shared_ptr< graf_macierz<int, int> > mgraf, mrek;
+    uint czas;
+    uint rozmiar[5], gestosc[4], wyniki[5][4];
+    uint wybor;
+
+    rozmiar[0]= 50;
+    rozmiar[1]= 100;
+    rozmiar[2]= 250;
+    rozmiar[3]= 500;
+    rozmiar[4]= 1000;
+
+    gestosc[0]= 25;
+    gestosc[1]= 50;
+    gestosc[2]= 75;
+    gestosc[3]= 100;
+
+    /* lgraf= make_shared< graf_lista<int, int> >(1000); */
+    /* cout << testK(lgraf, 100); */
+    /* return; */
+
+    cout << "Wybierz algorytm: " << endl;
+    cout << "1. Kruskal" << endl;
+    cout << "2. Prim" << endl;
+    cin >> wybor;
+
+    if(wybor == 1){
+	cout << "Alg. Kruskala dla listy sąsiedztwa: " << endl;
+	for(uint i=0; i < 5; i++){
+	    lgraf= make_shared< graf_lista<int, int> >(rozmiar[i]);
+	
+	    for(uint j= 0; j < 4; j++){
+		czas= testK(lgraf, gestosc[j]);
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		wyniki[i][j]= czas;
+	    }
+	
+	    lgraf.reset();
+	}
+
+	for(uint i= 0; i < 4; i++){
+	    ofstream plik("wyniki/kruskal/lista/" + to_string(gestosc[i]) + ".txt");
+	    for(uint j= 0; j < 5; j++)
+		plik << wyniki[j][i] << '\n';
+
+	    plik.close();
+	}
+
+	/* --------------------- */
+
+	cout << "Alg. Kruskala dla macierzy sąsiedztwa: " << endl;
+	for(uint i=0; i < 5; i++){
+	    mgraf= make_shared< graf_macierz<int, int> >(rozmiar[i]);
+	
+	    for(uint j= 0; j < 4; j++){
+		czas= testK(mgraf, gestosc[j]);
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		wyniki[i][j]= czas;
+	    }
+	
+	    mgraf.reset();
+	}
+
+	for(uint i= 0; i < 4; i++){
+	    ofstream plik("wyniki/kruskal/macierz/" + to_string(gestosc[i]) + ".txt");
+	    for(uint j= 0; j < 5; j++)
+		plik << wyniki[j][i] << '\n';
+
+	    plik.close();
+	}
+    }
+    else if(wybor == 2){
+	cout << "Alg. Prima dla listy sąsiedztwa: " << endl;
+	for(uint i=0; i < 5; i++){
+	    lgraf= make_shared< graf_lista<int, int> >(rozmiar[i]);
+	
+	    for(uint j= 0; j < 4; j++){
+		czas= testP(lgraf, gestosc[j]);
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		wyniki[i][j]= czas;
+	    }
+	
+	    lgraf.reset();
+	}
+
+	for(uint i= 0; i < 4; i++){
+	    ofstream plik("wyniki/prim/lista/" + to_string(gestosc[i]) + ".txt");
+	    for(uint j= 0; j < 5; j++)
+		plik << wyniki[j][i] << '\n';
+
+	    plik.close();
+	}
+
+	/* --------------------- */
+
+	cout << "Alg. Prima dla macierzy sąsiedztwa: " << endl;
+	for(uint i=0; i < 5; i++){
+	    mgraf= make_shared< graf_macierz<int, int> >(rozmiar[i]);
+	
+	    for(uint j= 0; j < 4; j++){
+		czas= testP(mgraf, gestosc[j]);
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		wyniki[i][j]= czas;
+	    }
+	
+	    mgraf.reset();
+	}
+
+	for(uint i= 0; i < 4; i++){
+	    ofstream plik("wyniki/prim/macierz/" + to_string(gestosc[i]) + ".txt");
+	    for(uint j= 0; j < 5; j++)
+		plik << wyniki[j][i] << '\n';
+
+	    plik.close();
+	}
+    }
+}
+
+
 int main(void){
     czas start, stop;
     uint wybor;
@@ -207,6 +342,7 @@ int main(void){
     case 2:
 	cout << "Wybrano test. automatyczne" << '\n';
 	cout << '\n';
+	testujAutomatycznie();
 	break;
 
     default:

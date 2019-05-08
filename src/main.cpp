@@ -162,7 +162,7 @@ uint testK(G graf, uint gestosc){
     shared_ptr<drzewo<int, int>> mst;
     czas start, stop;
     uint czas_sredni= 0;
-    const uint powtorzenia= 20;
+    const uint powtorzenia= 50;
 
     mst= make_shared< drzewo<int, int> >();
     for(uint i= 0; i < powtorzenia; i++){
@@ -171,7 +171,7 @@ uint testK(G graf, uint gestosc){
 	start= zegar::now();
 	kruskal(graf, mst);
 	stop= zegar::now();
-	czas_sredni+= obliczCzas(start, stop, 'm');
+	czas_sredni+= obliczCzas(start, stop, 'u');
 
 	graf->czyscGraf();
 	mst->czyscListe();
@@ -185,7 +185,7 @@ uint testP(G graf, uint gestosc){
     shared_ptr<drzewo<int, int>> mst;
     czas start, stop;
     uint czas_sredni= 0;
-    const uint powtorzenia= 20;
+    const uint powtorzenia= 50;
 
     mst= make_shared< drzewo<int, int> >();
     for(uint i= 0; i < powtorzenia; i++){
@@ -194,7 +194,7 @@ uint testP(G graf, uint gestosc){
 	start= zegar::now();
 	prim(graf, mst);
 	stop= zegar::now();
-	czas_sredni+= obliczCzas(start, stop, 'm');
+	czas_sredni+= obliczCzas(start, stop, 'u');
 
 	graf->czyscGraf();
 	mst->czyscListe();
@@ -237,7 +237,7 @@ void testujAutomatycznie(void){
 	
 	    for(uint j= 0; j < 4; j++){
 		czas= testK(lgraf, gestosc[j]);
-		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "us" << endl;
 		wyniki[i][j]= czas;
 	    }
 	
@@ -260,7 +260,7 @@ void testujAutomatycznie(void){
 	
 	    for(uint j= 0; j < 4; j++){
 		czas= testK(mgraf, gestosc[j]);
-		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "us" << endl;
 		wyniki[i][j]= czas;
 	    }
 	
@@ -282,7 +282,7 @@ void testujAutomatycznie(void){
 	
 	    for(uint j= 0; j < 4; j++){
 		czas= testP(lgraf, gestosc[j]);
-		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "us" << endl;
 		wyniki[i][j]= czas;
 	    }
 	
@@ -305,7 +305,7 @@ void testujAutomatycznie(void){
 	
 	    for(uint j= 0; j < 4; j++){
 		czas= testP(mgraf, gestosc[j]);
-		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "ms" << endl;
+		cout << "Czas dla " << rozmiar[i] << " , " << gestosc[j] << "% " << czas << "us" << endl;
 		wyniki[i][j]= czas;
 	    }
 	
